@@ -1,3 +1,4 @@
+cache: apt
 env:
  - GHCVER=7.8.2
 
