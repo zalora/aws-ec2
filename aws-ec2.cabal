@@ -1,0 +1,42 @@
+name:                aws-ec2
+version:             0.1.0.0
+license-file:        LICENSE
+author:              Vladimir Kirillov
+maintainer:          vlad.ki@zalora.com
+copyright:           2014 Zalora
+build-type:          Simple
+cabal-version:       >=1.10
+
+library
+  exposed-modules:
+      Aws.Ec2
+    , Aws.Elb
+    , Aws.Query
+  build-depends:
+      base >=4 && <5
+    , template-haskell
+    , containers
+    , mtl
+    , text
+    , bytestring
+    , base16-bytestring
+    , base64-bytestring
+    , time
+
+    , aeson
+    , unordered-containers
+    , vector
+    , scientific
+
+    , resourcet
+    , byteable
+    , cryptohash
+    , http-types
+    , http-conduit
+    , conduit-extra
+    , xml-conduit
+    , aws
+
+  hs-source-dirs:      src
+  default-language:    Haskell2010
+  default-extensions:  OverloadedStrings
