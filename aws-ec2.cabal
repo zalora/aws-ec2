@@ -11,7 +11,11 @@ library
   exposed-modules:
       Aws.Ec2
     , Aws.Elb
+    , Aws.CloudWatch
+    , Aws.CloudWatch.Types
     , Aws.Query
+    , Aws.Query.Types
+    , Aws.Canonical
   build-depends:
       base >=4 && <5
     , template-haskell
@@ -21,6 +25,7 @@ library
     , bytestring
     , base16-bytestring
     , base64-bytestring
+    , blaze-builder
     , time
 
     , aeson
@@ -38,5 +43,18 @@ library
     , aws
 
   hs-source-dirs:      src
+  default-language:    Haskell2010
+  default-extensions:  OverloadedStrings
+
+executable put-metric
+  main-is: put-metric.hs
+  build-depends:
+      base
+    , bytestring
+    , optparse-applicative
+    , aws
+    , aws-ec2
+
+  hs-source-dirs:      cmd
   default-language:    Haskell2010
   default-extensions:  OverloadedStrings

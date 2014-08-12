@@ -1,3 +1,7 @@
 /result
 /dist
 /.cabal-sandbox
+*.dyn_hi
+*.dyn_o
+*.hi
+

@@ -15,6 +15,7 @@ module Aws.Query (
 , QueryMetadata(..)
 , QueryError(..)
 , querySignQuery
+, v2SignQuery
 , qArg
 , qShow
 , qBool
@@ -32,6 +33,9 @@ import qualified Control.Exception as C
 import Control.Monad.Trans.Resource (throwM)
 import Control.Monad (mplus)
 
+import qualified Blaze.ByteString.Builder as Blaze
+import qualified Blaze.ByteString.Builder.Char8 as Blaze8
+
 import Data.ByteString.Char8 (ByteString)
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Char8 as B8
@@ -40,6 +44,7 @@ import qualified Data.Text as T
 import Data.Text (Text)
 import Data.Text.Encoding (encodeUtf8)
 
+import Data.List
 import Data.Monoid
 import Data.Maybe
 import Data.IORef
@@ -68,7 +73,7 @@ instance DefaultServiceConfiguration (QueryAPIConfiguration NormalQuery) where
 data QueryData = QueryData
                { qdEndpoint :: B.ByteString
                , qdRegion :: B.ByteString
-               , qdService :: B.ByteString
+               , qdService :: B.ByteString -- ^ matters only for v4 signatures
                } deriving (Show)
 
 data QueryError = QueryError
@@ -95,8 +100,8 @@ querySignQuery query QueryData{..} sd
     = SignedQuery {
         sqMethod = Post
       , sqProtocol = HTTPS
-      , sqHost = host
-      , sqPort = port
+      , sqHost = qdEndpoint
+      , sqPort = 443
       , sqPath = "/"
       , sqQuery = []
       , sqDate = Just $ signatureTime sd
@@ -109,9 +114,6 @@ querySignQuery query QueryData{..} sd
       , sqStringToSign = canonicalRequest
       }
     where
-        region = qdRegion
-        host = qdEndpoint
-        port = 443
         sigTime = fmtTime "%Y%m%dT%H%M%SZ" $ signatureTime sd
 
         body = HTTP.renderQuery False query
@@ -127,7 +129,7 @@ querySignQuery query QueryData{..} sd
                                     , contentType
                                     , "\n"
                                     , "host:"
-                                    , host
+                                    , qdEndpoint
                                     , "\n"
                                     , "x-amz-date:"
                                     , sigTime
@@ -138,9 +140,56 @@ querySignQuery query QueryData{..} sd
                                     , bodyHash
                                     ]
 
-        auth = authorizationV4 sd HmacSHA256 region qdService
+        auth = authorizationV4 sd HmacSHA256 qdRegion qdService
                                enumHeaders
                                canonicalRequest
+
+v2SignQuery :: HTTP.Query -> QueryData -> SignatureData -> SignedQuery
+v2SignQuery q QueryData{..} SignatureData{..}
+    = SignedQuery {
+        sqMethod        = Post
+      , sqProtocol      = HTTPS
+      , sqHost          = qdEndpoint
+      , sqPort          = 443
+      , sqPath          = "/"
+      , sqQuery         = []
+      , sqDate          = Just signatureTime
+      , sqAuthorization = Nothing
+      , sqContentType   = Just contentType
+      , sqContentMd5    = Nothing
+      , sqAmzHeaders    = []
+      , sqOtherHeaders  = []
+      , sqBody          = Just $ HTTP.RequestBodyBS body
+      , sqStringToSign  = stringToSign
+      }
+    where
+      contentType     = "application/x-www-form-urlencoded"
+      accessKey       = accessKeyID signatureCredentials
+      iamTok          = maybe [] (\x -> [("SecurityToken", Just x)]) (iamToken signatureCredentials)
+
+      body            = HTTP.renderQuery False signedQuery
+      sig             = signature signatureCredentials HmacSHA256 stringToSign
+      signedQuery     = ("Signature", Just sig):expandedQuery
+
+      timestampHeader =
+          case signatureTimeInfo of
+            AbsoluteTimestamp time -> ("Timestamp", Just $ fmtAmzTime time)
+            AbsoluteExpires   time -> ("Expires"  , Just $ fmtAmzTime time)
+
+      newline         = Blaze8.fromChar '\n'
+
+      stringToSign    = Blaze.toByteString . mconcat . intersperse newline $
+                            map Blaze.copyByteString
+                                ["POST", qdEndpoint, "/"]
+                            ++  [HTTP.renderQueryBuilder False expandedQuery]
+
+      expandedQuery   = HTTP.toQuery . sort $ ((iamTok ++ q) ++) [
+                            ("AWSAccessKeyId"  , Just accessKey)
+                          , ("SignatureMethod" , Just $ amzHash HmacSHA256)
+                          , ("SignatureVersion", Just "2")
+                          , timestampHeader
+                          ]
+
 
 qArg :: Text -> Maybe B.ByteString
 qArg = Just . encodeUtf8
