@@ -12,7 +12,9 @@ library
       Aws.Ec2
     , Aws.Elb
     , Aws.CloudWatch
+    , Aws.CloudWatch.Core
     , Aws.CloudWatch.Types
+    , Aws.CloudWatch.Commands.PutMetricData
     , Aws.Query
     , Aws.Query.Types
     , Aws.Canonical
@@ -51,6 +53,7 @@ executable put-metric
   build-depends:
       base
     , bytestring
+    , text
     , optparse-applicative
     , aws
     , aws-ec2
