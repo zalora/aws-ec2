@@ -1,5 +1,5 @@
 name:                aws-ec2
-version:             0.1
+version:             0.2
 synopsis:            AWS EC2/VPC, ELB and CloudWatch client library for Haskell
 license-file:        LICENSE
 license:             BSD3
@@ -15,7 +15,7 @@ description:         AWS client library with focus on infrastructure services li
 source-repository this
   type: git
   location: https://github.com/zalora/aws-ec2.git
-  tag: 0.1
+  tag: 0.2
 
 source-repository head
   type: git
@@ -78,6 +78,10 @@ library
     , Aws.Elb.Commands.DescribeLoadBalancers
     , Aws.Elb.Commands.ModifyLoadBalancerAttributes
     , Aws.Elb.Commands.RegisterInstancesWithLoadBalancer
+    , Aws.Elb.Commands.DeregisterInstancesFromLoadBalancer
+    , Aws.Elb.Commands.CreateLBCookieStickinessPolicy
+    , Aws.Elb.Commands.SetLoadBalancerPoliciesOfListener
+
   build-depends:
       base >=4 && <5
     , template-haskell
