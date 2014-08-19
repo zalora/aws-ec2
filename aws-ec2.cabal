@@ -23,15 +23,61 @@ source-repository head
 
 library
   exposed-modules:
-      Aws.Ec2
-    , Aws.Elb
+      Aws.Canonical
+
+    , Aws.Query
+    , Aws.Query.TH
+    , Aws.Query.Types
+    , Aws.TH
+
     , Aws.CloudWatch
     , Aws.CloudWatch.Core
     , Aws.CloudWatch.Types
     , Aws.CloudWatch.Commands.PutMetricData
-    , Aws.Query
-    , Aws.Query.Types
-    , Aws.Canonical
+
+    , Aws.Ec2
+    , Aws.Ec2.Core
+    , Aws.Ec2.TH
+    , Aws.Ec2.Types
+    , Aws.Ec2.Commands.AttachInternetGateway
+    , Aws.Ec2.Commands.AttachVolume
+    , Aws.Ec2.Commands.AuthorizeSecurityGroupIngress
+    , Aws.Ec2.Commands.CreateInternetGateway
+    , Aws.Ec2.Commands.CreateRoute
+    , Aws.Ec2.Commands.CreateSecurityGroup
+    , Aws.Ec2.Commands.CreateSubnet
+    , Aws.Ec2.Commands.CreateTags
+    , Aws.Ec2.Commands.CreateVolume
+    , Aws.Ec2.Commands.CreateVpc
+    , Aws.Ec2.Commands.DescribeAvailabilityZones
+    , Aws.Ec2.Commands.DescribeImages
+    , Aws.Ec2.Commands.DescribeInstanceStatus
+    , Aws.Ec2.Commands.DescribeInstances
+    , Aws.Ec2.Commands.DescribeKeyPairs
+    , Aws.Ec2.Commands.DescribeRegions
+    , Aws.Ec2.Commands.DescribeRouteTables
+    , Aws.Ec2.Commands.DescribeSecurityGroups
+    , Aws.Ec2.Commands.DescribeSubnets
+    , Aws.Ec2.Commands.DescribeTags
+    , Aws.Ec2.Commands.DescribeVolumeStatus
+    , Aws.Ec2.Commands.DescribeVolumes
+    , Aws.Ec2.Commands.DescribeVpcs
+    , Aws.Ec2.Commands.GetConsoleOutput
+    , Aws.Ec2.Commands.ImportKeyPair
+    , Aws.Ec2.Commands.ModifyVpcAttribute
+    , Aws.Ec2.Commands.RunInstances
+
+    , Aws.Elb
+    , Aws.Elb.Core
+    , Aws.Elb.TH
+    , Aws.Elb.Types
+    , Aws.Elb.Commands.CreateLoadBalancer
+    , Aws.Elb.Commands.DescribeInstanceHealth
+    , Aws.Elb.Commands.DescribeLoadBalancerPolicies
+    , Aws.Elb.Commands.DescribeLoadBalancerPolicyTypes
+    , Aws.Elb.Commands.DescribeLoadBalancers
+    , Aws.Elb.Commands.ModifyLoadBalancerAttributes
+    , Aws.Elb.Commands.RegisterInstancesWithLoadBalancer
   build-depends:
       base >=4 && <5
     , template-haskell
@@ -60,7 +106,7 @@ library
 
   hs-source-dirs:      src
   default-language:    Haskell2010
-  default-extensions:  OverloadedStrings
+  default-extensions:  OverloadedStrings, TemplateHaskell
 
 executable put-metric
   main-is: put-metric.hs
