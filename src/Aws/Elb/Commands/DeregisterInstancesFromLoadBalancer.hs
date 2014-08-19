@@ -12,8 +12,8 @@ import qualified Network.HTTP.Types as HTTP
 import Aws.Elb.TH
 
 data DeregisterInstancesFromLoadBalancer = DeregisterInstancesFromLoadBalancer
-                        { rilb_name :: Text
-                        , rilb_instanceIds :: [Text]
+                        { dilb_name :: Text
+                        , dilb_instanceIds :: [Text]
                         } deriving (Show)
 
 enumerateInstanceIds :: [Text] -> HTTP.Query
@@ -26,7 +26,7 @@ instance SignQuery DeregisterInstancesFromLoadBalancer where
     signQuery DeregisterInstancesFromLoadBalancer{..} = elbSignQuery $
                                                     [ ("Action", qArg "DeregisterInstancesFromLoadBalancer")
                                                     , defVersion
-                                                    , ("LoadBalancerName", qArg rilb_name)
-                                                    ] +++ enumerateInstanceIds rilb_instanceIds
+                                                    , ("LoadBalancerName", qArg dilb_name)
+                                                    ] +++ enumerateInstanceIds dilb_instanceIds
 
 elbValueTransaction ''DeregisterInstancesFromLoadBalancer "DeregisterInstancesFromLoadBalancerResult"
