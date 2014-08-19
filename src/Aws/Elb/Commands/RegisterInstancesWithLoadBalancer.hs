@@ -10,16 +10,12 @@ module Aws.Elb.Commands.RegisterInstancesWithLoadBalancer where
 
 import qualified Network.HTTP.Types as HTTP
 import Aws.Elb.TH
+import Aws.Elb.Types
 
 data RegisterInstancesWithLoadBalancer = RegisterInstancesWithLoadBalancer
                         { rilb_name :: Text
                         , rilb_instanceIds :: [Text]
                         } deriving (Show)
-
-enumerateInstanceIds :: [Text] -> HTTP.Query
-enumerateInstanceIds = enumerateLists "Instances.member." . fmap unroll
-  where
-    unroll i = [("InstanceId", qArg i)]
 
 instance SignQuery RegisterInstancesWithLoadBalancer where
     type ServiceConfiguration RegisterInstancesWithLoadBalancer = QueryAPIConfiguration

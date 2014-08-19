@@ -10,16 +10,12 @@ module Aws.Elb.Commands.DeregisterInstancesFromLoadBalancer where
 
 import qualified Network.HTTP.Types as HTTP
 import Aws.Elb.TH
+import Aws.Elb.Types
 
 data DeregisterInstancesFromLoadBalancer = DeregisterInstancesFromLoadBalancer
                         { dilb_name :: Text
                         , dilb_instanceIds :: [Text]
                         } deriving (Show)
-
-enumerateInstanceIds :: [Text] -> HTTP.Query
-enumerateInstanceIds = enumerateLists "Instances.member." . fmap unroll
-  where
-    unroll i = [("InstanceId", qArg i)]
 
 instance SignQuery DeregisterInstancesFromLoadBalancer where
     type ServiceConfiguration DeregisterInstancesFromLoadBalancer = QueryAPIConfiguration

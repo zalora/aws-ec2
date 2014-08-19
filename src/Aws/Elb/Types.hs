@@ -15,3 +15,9 @@ import Network.HTTP.Types as HTTP
 
 import Aws.Query
 import Aws.Elb.Core
+
+enumerateInstanceIds :: [Text] -> HTTP.Query
+enumerateInstanceIds = enumerateLists "Instances.member." . fmap unroll
+  where
+    unroll i = [("InstanceId", qArg i)]
+
