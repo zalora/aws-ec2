@@ -12,7 +12,7 @@ import Aws.Elb.TH
 
 data CreateLBCookieStickinessPolicy = CreateLBCookieStickinessPolicy
                         { clbcsp_loadBalancerName :: Text
-                        , clbcsp_cookieExpirationPeriod :: Integer
+                        , clbcsp_cookieExpirationPeriod :: Maybe Integer
                         , clbcsp_policyName :: Text
                         } deriving (Show)
 
@@ -22,8 +22,7 @@ instance SignQuery CreateLBCookieStickinessPolicy where
                                                     [ ("Action", qArg "CreateLBCookieStickinessPolicy")
                                                     , defVersion
                                                     , ("LoadBalancerName", qArg clbcsp_loadBalancerName)
-                                                    , ("CookieExpirationPeriod", qShow clbcsp_cookieExpirationPeriod)
                                                     , ("PolicyName", qArg clbcsp_policyName)
-                                                    ]
+                                                    ] +++ optional "CookieExpirationPeriod" clbcsp_cookieExpirationPeriod qShow
 
 elbValueTransaction ''CreateLBCookieStickinessPolicy "CreateLBCookieStickinessPolicyResult"
