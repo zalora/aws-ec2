@@ -81,6 +81,7 @@ library
     , Aws.Elb.Commands.DeregisterInstancesFromLoadBalancer
     , Aws.Elb.Commands.CreateLBCookieStickinessPolicy
     , Aws.Elb.Commands.SetLoadBalancerPoliciesOfListener
+    , Aws.Elb.Commands.ConfigureHealthCheck
 
   build-depends:
       base >=4 && <5

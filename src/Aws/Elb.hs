@@ -16,6 +16,8 @@ module Aws.Elb (
 
 , module Aws.Elb.Commands.CreateLBCookieStickinessPolicy
 , module Aws.Elb.Commands.SetLoadBalancerPoliciesOfListener
+
+, module Aws.Elb.Commands.ConfigureHealthCheck
 ) where
 
 import Aws.Core (Transaction)
@@ -35,3 +37,5 @@ import Aws.Elb.Commands.DeregisterInstancesFromLoadBalancer
 
 import Aws.Elb.Commands.CreateLBCookieStickinessPolicy
 import Aws.Elb.Commands.SetLoadBalancerPoliciesOfListener
+
+import Aws.Elb.Commands.ConfigureHealthCheck
