@@ -28,7 +28,7 @@ data RunInstances = RunInstances
                   , run_subnetId :: Maybe Text
                   , run_monitoringEnabled :: Bool
                   , run_disableApiTermination :: Bool
-                  , run_instanceInitiatedShutdownBehavior :: InstanceInitiatedShutdownBehavior
+                  , run_instanceInitiatedShutdownBehavior :: Maybe InstanceInitiatedShutdownBehavior
                   , run_ebsOptimized :: Bool
 
                   , run_keyName :: Maybe Text
@@ -77,9 +77,9 @@ instance SignQuery RunInstances where
                  , ("InstanceType", qArg run_instanceType)
                  , ("Monitoring.Enabled", qShow run_monitoringEnabled)
                  , ("DisableApiTermination", qShow run_disableApiTermination)
-                 , ("InstanceInitiatedShutdownBehavior", qShow run_instanceInitiatedShutdownBehavior)
                  , ("EbsOptimized", qShow run_ebsOptimized)
                  ] +++ optionalA "IamInstanceProfile.Arn" run_iamInstanceProfileARN
+                   +++ optional "InstanceInitiatedShutdownBehavior" run_instanceInitiatedShutdownBehavior qShow
                    +++ case run_subnetId of
                          Nothing -> enumerate "SecurityGroupId" run_securityGroupIds qArg
                          Just subnetId -> [ ("NetworkInterface.0.DeviceIndex", qShow 0)

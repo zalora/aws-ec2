@@ -1,5 +1,5 @@
 name:                aws-ec2
-version:             0.2.1
+version:             0.2.2
 synopsis:            AWS EC2/VPC, ELB and CloudWatch client library for Haskell
 license-file:        LICENSE
 license:             BSD3
@@ -15,7 +15,7 @@ description:         AWS client library with focus on infrastructure services li
 source-repository this
   type: git
   location: https://github.com/zalora/aws-ec2.git
-  tag: 0.2.1
+  tag: 0.2.2
 
 source-repository head
   type: git
