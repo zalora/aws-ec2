@@ -3,6 +3,7 @@
            , TypeFamilies
            , RecordWildCards
            , DeriveGeneric
+           , OverloadedStrings
            #-}
 
 module Aws.Ec2.Commands.GetConsoleOutput where

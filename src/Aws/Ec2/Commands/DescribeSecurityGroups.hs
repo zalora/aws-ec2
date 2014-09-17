@@ -2,6 +2,7 @@
            , MultiParamTypeClasses
            , TypeFamilies
            , RecordWildCards
+           , OverloadedStrings
            #-}
 
 module Aws.Ec2.Commands.DescribeSecurityGroups where

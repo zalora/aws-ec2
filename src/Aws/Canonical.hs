@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 module Aws.Canonical where
 
 import Data.IORef
