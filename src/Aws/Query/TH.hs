@@ -19,8 +19,6 @@ module Aws.Query.TH (
 ) where
 
 import Language.Haskell.TH
-import Language.Haskell.TH.Lib
-import Language.Haskell.TH.Syntax
 
 import Data.Text (Text)
 import Data.Aeson.Types (FromJSON(..))
