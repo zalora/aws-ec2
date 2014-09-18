@@ -1,7 +1,6 @@
 {-# LANGUAGE TypeFamilies
            , MultiParamTypeClasses
            , FlexibleInstances
-           , OverloadedStrings
            , TemplateHaskell
            #-}
 

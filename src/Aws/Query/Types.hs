@@ -2,7 +2,6 @@
            , LambdaCase
            , RecordWildCards
            , NamedFieldPuns
-           , OverloadedStrings
            , MultiWayIf
            , TypeFamilies
            #-}

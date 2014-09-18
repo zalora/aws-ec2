@@ -1,7 +1,6 @@
 {-# LANGUAGE TemplateHaskell
            , MultiParamTypeClasses
            , TypeFamilies
-           , OverloadedStrings
            #-}
 
 module Aws.Ec2.Commands.DescribeSubnets where
