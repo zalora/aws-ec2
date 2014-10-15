@@ -38,6 +38,7 @@ data RunInstances = RunInstances
                   , run_clientToken :: Maybe Text
                   , run_iamInstanceProfileARN :: Maybe Text
                   , run_availabilityZone :: Maybe Text
+                  , run_associatePublicIpAddress :: Bool
                   -- , run_placement :: Maybe Placement
                   -- also missing: NetworkInterface
                   } deriving (Show)
@@ -84,7 +85,7 @@ instance SignQuery RunInstances where
                          Nothing -> enumerate "SecurityGroupId" run_securityGroupIds qArg
                          Just subnetId -> [ ("NetworkInterface.0.DeviceIndex", qShow 0)
                                           , ("NetworkInterface.0.SubnetId", qArg subnetId)
-                                          , ("NetworkInterface.0.AssociatePublicIpAddress", qShow True)
+                                          , ("NetworkInterface.0.AssociatePublicIpAddress", qShow run_associatePublicIpAddress)
                                           ] +++ enumerate "NetworkInterface.0.SecurityGroupId" run_securityGroupIds qArg
 
 ec2ValueTransaction ''RunInstances "RunInstancesResponse"

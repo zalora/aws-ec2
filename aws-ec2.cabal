@@ -66,6 +66,9 @@ library
     , Aws.Ec2.Commands.ImportKeyPair
     , Aws.Ec2.Commands.ModifyVpcAttribute
     , Aws.Ec2.Commands.RunInstances
+    , Aws.Ec2.Commands.StartInstances
+    , Aws.Ec2.Commands.StopInstances
+    , Aws.Ec2.Commands.TerminateInstances
 
     , Aws.Elb
     , Aws.Elb.Core
@@ -122,6 +125,25 @@ executable put-metric
     , optparse-applicative
     , aws >= 0.9.3
     , aws-ec2
+
+  hs-source-dirs:      cmd
+  default-language:    Haskell2010
+  default-extensions:  OverloadedStrings
+
+executable run-inst
+  main-is: run-inst.hs
+  build-depends:
+      base
+    , bytestring
+    , text
+    , optparse-applicative
+    , aws >= 0.9.3
+    , aws-ec2
+    , yaml
+    , vector
+    , containers
+    , unordered-containers
+    , aeson
 
   hs-source-dirs:      cmd
   default-language:    Haskell2010
