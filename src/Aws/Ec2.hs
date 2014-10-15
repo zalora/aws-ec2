@@ -20,6 +20,9 @@ module Aws.Ec2 (
 , module Aws.Ec2.Commands.DescribeInstances
 , module Aws.Ec2.Commands.DescribeInstanceStatus
 , module Aws.Ec2.Commands.RunInstances
+, module Aws.Ec2.Commands.StartInstances
+, module Aws.Ec2.Commands.StopInstances
+, module Aws.Ec2.Commands.TerminateInstances
 , module Aws.Ec2.Commands.GetConsoleOutput
 
 , module Aws.Ec2.Commands.DescribeVpcs
@@ -60,6 +63,9 @@ import Aws.Ec2.Commands.ImportKeyPair
 import Aws.Ec2.Commands.DescribeInstances
 import Aws.Ec2.Commands.DescribeInstanceStatus
 import Aws.Ec2.Commands.RunInstances
+import Aws.Ec2.Commands.StartInstances
+import Aws.Ec2.Commands.StopInstances
+import Aws.Ec2.Commands.TerminateInstances
 import Aws.Ec2.Commands.GetConsoleOutput
 
 import Aws.Ec2.Commands.DescribeVpcs
