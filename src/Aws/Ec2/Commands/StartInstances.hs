@@ -34,4 +34,4 @@ instance SignQuery StartInstances where
           enumerateInstances [] = []
           enumerateInstances ((i,x):xs) = [("InstanceId." <> pack (show i), qArg x)] +++ enumerateInstances xs
 
-ec2ValueTransaction ''StartInstances "StartInstancesResponse"
+EC2VALUETRANSACTION(StartInstances,"StartInstancesResponse")

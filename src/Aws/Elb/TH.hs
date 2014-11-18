@@ -11,8 +11,10 @@ module Aws.Elb.TH (
 , module Aws.Query
 , Text
 , FromJSON
+#ifdef USE_TH
 , elbValueTransaction
 , elbValueTransactionDef
+#endif
 ) where
 
 import Language.Haskell.TH
@@ -27,6 +29,7 @@ import Aws.Query
 import Aws.Query.TH
 import Aws.Elb.Core
 
+#ifdef USE_TH
 elbValueTransaction :: Name -> String -> DecsQ
 elbValueTransaction ty tag = [d|
                   instance ResponseConsumer $(conT ty) Value where
@@ -37,3 +40,4 @@ elbValueTransaction ty tag = [d|
                   |]
 
 elbValueTransactionDef ty cons tag filterKey = queryValueTransactionDef ty cons tag 'elbSignQuery 'defVersion "member" filterKey
+#endif

@@ -50,4 +50,4 @@ instance SignQuery AuthorizeSecurityGroupIngress where
                                            , defVersion
                                            ] +++ enumeratePermissions asi_permissions
 
-ec2ValueTransaction ''AuthorizeSecurityGroupIngress "AuthorizeSecurityGroupIngressResponse"
+EC2VALUETRANSACTION(AuthorizeSecurityGroupIngress,"AuthorizeSecurityGroupIngressResponse")

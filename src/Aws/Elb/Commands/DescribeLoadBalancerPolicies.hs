@@ -19,4 +19,4 @@ instance SignQuery DescribeLoadBalancerPolicies where
                                                                  , ("LoadBalancerName", qArg lb)
                                                                  ]
 
-elbValueTransaction ''DescribeLoadBalancerPolicies "DescribeLoadBalancerPoliciesResult"
+ELBVALUETRANSACTION(DescribeLoadBalancerPolicies,"DescribeLoadBalancerPoliciesResult")

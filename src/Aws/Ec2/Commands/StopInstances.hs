@@ -35,4 +35,4 @@ instance SignQuery StopInstances where
           enumerateInstances ((i,x):xs) = [("InstanceId." <> pack (show i), qArg x)] +++ enumerateInstances xs
 
 
-ec2ValueTransaction ''StopInstances "StopInstancesResponse"
+EC2VALUETRANSACTION(StopInstances,"StopInstancesResponse")

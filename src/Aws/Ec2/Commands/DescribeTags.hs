@@ -10,4 +10,4 @@ import Aws.Ec2.TH
 data DescribeTags = DescribeTags [Text]
                        deriving (Show)
 
-ec2ValueTransactionDef ''DescribeTags 'DescribeTags "tagSet" "" -- search not implemented
+EC2VALUETRANSACTIONDEF(DescribeTags,"DescribeTags","tagSet","") -- search not implemented

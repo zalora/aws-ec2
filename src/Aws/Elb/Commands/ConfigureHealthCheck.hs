@@ -46,4 +46,4 @@ instance SignQuery ConfigureHealthCheck where
                                                     , ("HealthCheck.Timeout", qShow hc_timeout)
                                                     ]
 
-elbValueTransaction ''ConfigureHealthCheck "ConfigureHealthCheckResult"
+ELBVALUETRANSACTION(ConfigureHealthCheck,"ConfigureHealthCheckResult")

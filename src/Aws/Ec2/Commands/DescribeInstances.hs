@@ -20,5 +20,5 @@ instance SignQuery DescribeInstances where
                                                 , defVersion
                                                 ] +++ enumerate "InstanceId" di_instanceIds qArg
 
-ec2ValueTransaction ''DescribeInstances "reservationSet"
+EC2VALUETRANSACTION(DescribeInstances,"reservationSet")
 

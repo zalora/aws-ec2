@@ -25,4 +25,4 @@ instance SignQuery CreateSecurityGroup where
                                            , defVersion
                                            ] +++ optionalA "VpcId" csec_vpcId
 
-ec2ValueTransaction ''CreateSecurityGroup "CreateSecurityGroupResponse"
+EC2VALUETRANSACTION(CreateSecurityGroup,"CreateSecurityGroupResponse")

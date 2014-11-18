@@ -20,4 +20,4 @@ instance SignQuery DescribeImages where
                                                         [] -> [("Owner.1", qArg "self")]
                                                         _ -> enumerate "ImageId" di_imageIds qArg
 
-ec2ValueTransaction ''DescribeImages "imagesSet"
+EC2VALUETRANSACTION(DescribeImages,"imagesSet")

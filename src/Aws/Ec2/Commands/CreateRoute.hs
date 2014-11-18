@@ -35,4 +35,4 @@ instance SignQuery CreateRoute where
                                                    NetworkInterfaceId t -> [("NetworkInterfaceId", qArg t)]
                                                    VpcPeeringConnectionId t -> [("VpcPeeringConnectionId", qArg t)]
 
-ec2ValueTransaction ''CreateRoute "return"
+EC2VALUETRANSACTION(CreateRoute,"return")

@@ -25,4 +25,4 @@ instance SignQuery CreateLBCookieStickinessPolicy where
                                                     , ("PolicyName", qArg clbcsp_policyName)
                                                     ] +++ optional "CookieExpirationPeriod" clbcsp_cookieExpirationPeriod qShow
 
-elbValueTransaction ''CreateLBCookieStickinessPolicy "CreateLBCookieStickinessPolicyResult"
+ELBVALUETRANSACTION(CreateLBCookieStickinessPolicy,"CreateLBCookieStickinessPolicyResult")

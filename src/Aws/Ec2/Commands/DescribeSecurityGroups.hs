@@ -27,4 +27,4 @@ instance SignQuery DescribeSecurityGroups where
                                                         [] -> []
                                                         _ -> ("Filter.1.Name", qArg "group-name"):(enumerate "Filter.1.Value" sg_names qArg)
 
-ec2ValueTransaction ''DescribeSecurityGroups "securityGroupInfo"
+EC2VALUETRANSACTION(DescribeSecurityGroups,"securityGroupInfo")

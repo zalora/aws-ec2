@@ -56,4 +56,4 @@ instance SignQuery CreateLoadBalancer where
                                                             _ -> []
 
 
-elbValueTransaction ''CreateLoadBalancer "CreateLoadBalancerResult"
+ELBVALUETRANSACTION(CreateLoadBalancer,"CreateLoadBalancerResult")

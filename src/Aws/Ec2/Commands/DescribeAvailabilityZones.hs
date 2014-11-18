@@ -10,4 +10,4 @@ import Aws.Ec2.TH
 data DescribeAvailabilityZones = DescribeAvailabilityZones [Text]
                        deriving (Show)
 
-ec2ValueTransactionDef ''DescribeAvailabilityZones 'DescribeAvailabilityZones "availabilityZoneInfo" "ZoneName"
+EC2VALUETRANSACTIONDEF(DescribeAvailabilityZones,"DescribeAvailabilityZones","availabilityZoneInfo","ZoneName")
