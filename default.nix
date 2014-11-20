@@ -30,7 +30,10 @@ in
 { system ? builtins.currentSystem
 , pkgs ? import nixpkgs { inherit system; }
 , name ? "aws-ec2"
-, src ? builtins.filterSource (path: type: type != "unknown" && baseNameOf path != ".git" && baseNameOf path != "result" && baseNameOf path != "dist") ./.
+, src ? builtins.filterSource (path: type: let base = baseNameOf path; in
+    type != "unknown" &&
+    base != ".git" && base != "result" && base != "dist" && base != ".cabal-sandbox"
+    ) ./.
 , haskellPackages ? pkgs.haskellPackages_ghc783
 }:
 with pkgs.lib;
