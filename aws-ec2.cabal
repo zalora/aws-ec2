@@ -129,6 +129,7 @@ executable put-metric
   hs-source-dirs:      cmd
   default-language:    Haskell2010
   default-extensions:  OverloadedStrings
+  ghc-options:         -static
 
 executable run-inst
   main-is: run-inst.hs
