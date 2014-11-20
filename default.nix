@@ -65,10 +65,17 @@ let
   aws = haskellPackages.callPackage ./aws.nix {};
 in
 
-buildLocalCabalWithArgs {
-  inherit src name;
-  args = {
-    inherit aws;
+rec {
+  library = buildLocalCabalWithArgs {
+    inherit src name;
+    args = {
+      inherit aws;
+    };
   };
+
+  put-metric = pkgs.runCommand "${name}-put-metric" {} ''
+    mkdir -p $out/bin
+    cp ${library}/bin/put-metric $out/bin
+  '';
 }
 
