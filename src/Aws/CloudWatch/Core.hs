@@ -5,6 +5,7 @@ module Aws.CloudWatch.Core (
 , module Aws.Core
 , module Aws.Query
 , module Aws.Query.TH
+, Dimension (..)
 , cwSignQuery
 ) where
 
@@ -14,8 +15,12 @@ import Aws.Core
 import Aws.Query
 import Aws.Query.TH
 
+data Dimension = Dimension { di_name :: Text
+                           , di_value :: Text
+                           } deriving (Show, Eq)
+
 cwSignQuery :: Query -> QueryAPIConfiguration qt -> SignatureData -> SignedQuery
-cwSignQuery query QueryAPIConfiguration{..} sd = v2SignQuery query qd sd
+cwSignQuery query QueryAPIConfiguration{..} = v2SignQuery query qd
   where
     qd = QueryData { qdRegion = qaRegion
                    , qdEndpoint = B.concat ["monitoring.", qaRegion, ".amazonaws.com"]

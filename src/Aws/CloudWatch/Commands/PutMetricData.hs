@@ -14,10 +14,6 @@ import Data.Time.Clock (UTCTime)
 import Aws.CloudWatch.Core
 import Aws.CloudWatch.Types
 
-data Dimension = Dimension { di_name :: Text
-                           , di_value :: Text
-                           } deriving (Show, Eq)
-
 data MetricDatum = MetricDatum { md_dimensions :: [Dimension]
                                , md_metricName :: Text
                                , md_timestamp :: Maybe UTCTime

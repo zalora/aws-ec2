@@ -28,8 +28,29 @@ configuration useMetadata = do
 put :: String -> String -> String -> Double -> Unit -> String -> Bool -> IO ()
 put region namespace name value unit iodims useMetadata = do
     cfg <- configuration useMetadata
-    Aws.simpleAws cfg (QueryAPIConfiguration $ B.pack region) $ PutMetricAlarm (T.pack namespace)
+    Aws.simpleAws cfg (QueryAPIConfiguration $ B.pack region) $
+        PutMetricAlarm { ma_actions = []
+                       , ma_comparisonOperator = GreaterThanOrEqualToThreshold
+                       , ma_description = Nothing
+                       , ma_dimensions = dimensions
+                       , ma_evaluationPeriods = 3
+                       , ma_metricName = "some metric"
+                       , ma_name = "some name"
+                       , ma_namespace = (T.pack namespace)
+                       , ma_period = 300
+                       , ma_statistic = Maximum
+                       , ma_threshold = 3700
+                       , ma_unit = Nothing
+                       }
     return ()
+    where dimensions = map (\(name, value) -> Dimension name value) $ pairs iodims
+
+pairs :: String -> [(Text, Text)]
+pairs = concat . fmap (group . T.split (== '=')) . T.split (== ',') . T.pack
+  where
+    group (x:y:xs) = (x,y) : group xs
+    group [] = []
+    group _ = fail "could not match pairs"
 
 main = join $ customExecParser prefs opts
   where
