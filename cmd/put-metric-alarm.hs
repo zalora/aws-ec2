@@ -28,28 +28,8 @@ configuration useMetadata = do
 put :: String -> String -> String -> Double -> Unit -> String -> Bool -> IO ()
 put region namespace name value unit iodims useMetadata = do
     cfg <- configuration useMetadata
-    m <- metric
-    Aws.simpleAws cfg (QueryAPIConfiguration $ B.pack region) $ PutMetricData (T.pack namespace) [m]
+    Aws.simpleAws cfg (QueryAPIConfiguration $ B.pack region) $ PutMetricAlarm (T.pack namespace)
     return ()
-  where
-    metric = do
-      dimensions <- pairs iodims
-      return MetricDatum { md_dimensions = fmap (\(name, value) -> Dimension name value) dimensions
-                         , md_metricName = T.pack name
-                         , md_timestamp = Nothing
-                         , md_unit = Just unit
-                         , md_value = MetricValue value
-                         }
-
-pairs :: Monad m => String -> m [(Text, Text)]
-pairs = return . concat . fmap (group . T.split (== '=')) . T.split (== ',') . T.pack
-  where
-    group (x:y:xs) = (x,y) : group xs
-    group [] = []
-    group _ = fail "could not match pairs"
-
-units :: IO ()
-units = mapM_ print $ enumFrom Seconds
 
 main = join $ customExecParser prefs opts
   where
@@ -60,11 +40,10 @@ main = join $ customExecParser prefs opts
                         , prefColumns = 80
                         }
 
-    opts = parser `info` header "AWS CloudWatch PutMetricData client"
+    opts = parser `info` header "AWS CloudWatch PutMetricAlarm client"
 
-    parser = subparser (command "value" (args put `info` progDesc "put a value metric") <>
-                        command "units" (pure units `info` progDesc "list all metric units")
-                        )
+    parser = subparser
+        (command "value" (args put `info` progDesc "put a value metric"))
 
     args comm = comm <$> argument str (metavar "<region>")
                      <*> argument str (metavar "<namespace>")
