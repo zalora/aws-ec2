@@ -44,6 +44,13 @@ instance SignQuery PutMetricAlarm where
         [ ("Action", qArg "PutMetricAlarm")
         , ("Version", qArg "2010-08-01")
         , ("Namespace", qArg $ ma_namespace putMetricAlarm)
+        , ("AlarmName", qArg $ ma_name putMetricAlarm)
+        , ("Period", qShow $ ma_period putMetricAlarm)
+        , ("EvaluationPeriods", qShow $ ma_evaluationPeriods putMetricAlarm)
+        , ("Threshold", qShow $ ma_threshold putMetricAlarm)
+        , ("Statistic", qShow $ ma_statistic putMetricAlarm)
+        , ("ComparisonOperator", qShow $ ma_comparisonOperator putMetricAlarm)
+        , ("MetricName", qArg $ ma_metricName putMetricAlarm)
         ]
 
 queryValueTransaction ''PutMetricAlarm "PutMetricAlarmResponse"
