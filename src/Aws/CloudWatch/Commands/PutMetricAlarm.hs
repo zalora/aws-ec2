@@ -8,6 +8,8 @@
 
 module Aws.CloudWatch.Commands.PutMetricAlarm where
 
+import qualified Data.Text as T
+
 import Data.Text (Text)
 import Data.Monoid
 import Data.Time.Clock (UTCTime)
@@ -25,7 +27,7 @@ data ComparisonOperator = GreaterThanOrEqualToThreshold
 derivePatchedShowRead ''ComparisonOperator patchPer
 
 data PutMetricAlarm = PutMetricAlarm
-    { ma_actions :: [Text]
+    { ma_alarmActions :: [Text]
     , ma_comparisonOperator :: ComparisonOperator
     , ma_dimensions :: [Dimension]
     , ma_evaluationPeriods :: Integer
@@ -40,17 +42,17 @@ data PutMetricAlarm = PutMetricAlarm
 
 instance SignQuery PutMetricAlarm where
     type ServiceConfiguration PutMetricAlarm = QueryAPIConfiguration
-    signQuery putMetricAlarm = cwSignQuery
+    signQuery PutMetricAlarm{..} = cwSignQuery $
         [ ("Action", qArg "PutMetricAlarm")
         , ("Version", qArg "2010-08-01")
-        , ("Namespace", qArg $ ma_namespace putMetricAlarm)
-        , ("AlarmName", qArg $ ma_name putMetricAlarm)
-        , ("Period", qShow $ ma_period putMetricAlarm)
-        , ("EvaluationPeriods", qShow $ ma_evaluationPeriods putMetricAlarm)
-        , ("Threshold", qShow $ ma_threshold putMetricAlarm)
-        , ("Statistic", qShow $ ma_statistic putMetricAlarm)
-        , ("ComparisonOperator", qShow $ ma_comparisonOperator putMetricAlarm)
-        , ("MetricName", qArg $ ma_metricName putMetricAlarm)
-        ]
+        , ("Namespace", qArg ma_namespace)
+        , ("AlarmName", qArg ma_name)
+        , ("Period", qShow ma_period)
+        , ("EvaluationPeriods", qShow ma_evaluationPeriods)
+        , ("Threshold", qShow ma_threshold)
+        , ("Statistic", qShow ma_statistic)
+        , ("ComparisonOperator", qShow ma_comparisonOperator)
+        , ("MetricName", qArg ma_metricName)
+        ] +++ enumerate "AlarmActions.member" ma_alarmActions qArg
 
 queryValueTransaction ''PutMetricAlarm "PutMetricAlarmResponse"

@@ -28,13 +28,15 @@ configuration useMetadata = do
     load = if useMetadata then loadCredentialsFromInstanceMetadata
                           else loadCredentialsDefault
 
+-- TODO: alarmAction should be plural, but for some reason optparse-applicative
+-- can't parse a list of strings
 put :: String -> String -> String -> String -> ComparisonOperator -> Statistic
-    -> Double -> Integer -> Integer -> Unit -> String -> Bool -> IO ()
+    -> Double -> Integer -> Integer -> Unit -> String -> String -> Bool -> IO ()
 put region namespace name metricName comparisonOperator statistic
-    threshold period evaluationPeriods unit iodims useMetadata = do
+    threshold period evaluationPeriods unit iodims alarmAction useMetadata = do
     cfg <- configuration useMetadata
     Aws.simpleAws cfg (QueryAPIConfiguration $ B.pack region)
-        PutMetricAlarm { ma_actions = []
+        PutMetricAlarm { ma_alarmActions = [T.pack alarmAction]
                        , ma_comparisonOperator = comparisonOperator
                        , ma_dimensions = dimensions
                        , ma_evaluationPeriods = evaluationPeriods
@@ -79,6 +81,7 @@ main = join $ customExecParser prefs opts
                  <*> argument auto (metavar "<evaluation periods>")
                  <*> argument auto (metavar "<unit>")
                  <*> argument str (metavar "dimension1=value1")
+                 <*> argument str (metavar "<alarm actions>")
                  <*> switch (short 'm' <>
                              long "metadata" <>
                              help "Use instance metadata to get authentication info")
