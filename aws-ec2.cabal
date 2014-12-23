@@ -90,6 +90,10 @@ library
     , Aws.Elb.Commands.SetLoadBalancerPoliciesOfListener
     , Aws.Elb.Commands.ConfigureHealthCheck
 
+    , Aws.SNS
+    , Aws.SNS.Core
+    , Aws.SNS.Commands.CreateTopic
+
   build-depends:
       base >=4 && <5
     , template-haskell
@@ -145,6 +149,22 @@ executable put-metric-data
     , optparse-applicative
     , aws >= 0.9.4
     , aws-ec2
+
+  hs-source-dirs:      cmd
+  default-language:    Haskell2010
+  default-extensions:  OverloadedStrings
+  ghc-options:         -static
+
+executable create-topic
+  main-is: create-topic.hs
+  build-depends:
+      base
+    , bytestring
+    , text
+    , optparse-applicative
+    , aws >= 0.9.4
+    , aws-ec2
+    , unordered-containers
 
   hs-source-dirs:      cmd
   default-language:    Haskell2010
