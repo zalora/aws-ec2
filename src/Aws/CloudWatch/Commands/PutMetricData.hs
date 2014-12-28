@@ -31,8 +31,15 @@ data StatisticSet = StatisticSet { ss_maximum :: Double
                                  , ss_sum :: Double
                                  } deriving (Show, Eq)
 
-data PutMetricData = PutMetricData Text [MetricDatum]
-                   deriving (Show)
+data PutMetricData = PutMetricData
+    { pmd_region :: Text
+    , pmd_namespace :: Text
+    , pmd_metricName :: Text
+    , pmd_value :: Double
+    , pmd_unit :: Unit
+    , pmd_dimensions :: [Dimension]
+    , pmd_useMetadata :: Bool
+    } deriving (Show)
 
 enumerateMetrics :: [MetricDatum] -> Query
 enumerateMetrics = enumerateLists "MetricData.member." . fmap unroll
@@ -51,9 +58,16 @@ enumerateMetrics = enumerateLists "MetricData.member." . fmap unroll
 
 instance SignQuery PutMetricData where
     type ServiceConfiguration PutMetricData = QueryAPIConfiguration
-    signQuery (PutMetricData namespace xs) = cwSignQuery $ [ ("Action", qArg "PutMetricData")
-                                                           , ("Version", qArg "2010-08-01")
-                                                           , ("Namespace", qArg namespace)
-                                                           ] +++ enumerateMetrics xs
+    signQuery PutMetricData{..} = cwSignQuery $
+        [ ("Action", qArg "PutMetricData")
+        , ("Version", qArg "2010-08-01")
+        , ("Namespace", qArg pmd_namespace)
+        ] +++ enumerateMetrics [metric]
+            where metric = MetricDatum { md_dimensions = pmd_dimensions
+                                       , md_metricName = pmd_metricName
+                                       , md_timestamp = Nothing
+                                       , md_unit = Just $ pmd_unit
+                                       , md_value = MetricValue $ pmd_value
+                                       }
 
 QUERYVALUETRANSACTION(PutMetricData,"PutMetricDataResponse")

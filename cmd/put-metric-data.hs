@@ -4,50 +4,63 @@ module Main where
 
 import qualified Options.Applicative as O
 
-import Control.Monad
-import Options.Applicative
-
 import Aws (simpleAws)
+import Control.Monad (join)
 import Data.Text (split)
 import Data.Text.Encoding (encodeUtf8)
+import Options.Applicative ((<>), (<*>), (<$>))
 
 import Aws.CloudWatch
 import Aws.Cmd
 
-put :: Text -> Text -> Text -> Double -> Unit -> [Dimension] -> Bool -> IO ()
-put region namespace name value unit dimensions useMetadata = do
-    cfg <- configuration useMetadata
-    m <- metric
-    simpleAws cfg (QueryAPIConfiguration $ encodeUtf8 region) $ PutMetricData namespace [m]
+
+put :: PutMetricData -> IO ()
+put pmd = do
+    cfg <- configuration $ pmd_useMetadata pmd
+    simpleAws cfg (QueryAPIConfiguration $ encodeUtf8 $ pmd_region pmd) $ pmd
     return ()
-  where
-    metric = return MetricDatum
-        { md_dimensions = dimensions
-        , md_metricName = name
-        , md_timestamp = Nothing
-        , md_unit = Just unit
-        , md_value = MetricValue value
-        }
+
+
+dimensions :: O.ReadM [Dimension]
+dimensions = text >>= return . fmap (uncurry Dimension) . pairs
+    where
+        pairs :: Text -> [(Text, Text)]
+        pairs = concat . fmap (group . split (== '=')) . split (== ',')
+        group :: [a] -> [(a, a)]
+        group (x:y:xs) = (x, y) : group xs
+        group [] = []
+        group _ = fail "could not match pairs"
+
 
 units :: IO ()
 units = mapM_ print $ enumFrom Seconds
 
-main = join $ customExecParser defaultPrefs opts
-  where
 
-    opts = parser `info` header "AWS CloudWatch PutMetricData client"
+putMetricData :: O.Parser PutMetricData
+putMetricData = PutMetricData
+    <$> O.argument text (O.metavar "<region>")
+    <*> O.argument text (O.metavar "<namespace>")
+    <*> O.argument text (O.metavar "<metric name>")
+    <*> O.argument O.auto (O.metavar "<double value>")
+    <*> O.argument O.auto (O.metavar "<unit>")
+    -- TODO: OK to use O.many here?
+    <*> O.argument dimensions (O.metavar "d1=v1,d2=v2")
+    -- TODO: clarify whether this is useful
+    <*> O.switch ( O.short 'm'
+                <> O.long "metadata"
+                <> O.help "Use instance metadata to get authentication info"
+                 )
 
-    parser = subparser
-        ( command "value" (args `info` progDesc "put a value metric")
-       <> command "units" (pure units `info` progDesc "list all metric units")
-        )
 
-    args = put <$> argument text (metavar "<region>")
-               <*> argument text (metavar "<namespace>")
-               <*> argument text (metavar "<metric name>")
-               <*> argument auto (metavar "<double value>")
-               <*> argument auto (metavar "<unit>")
-               <*> O.many (O.argument O.auto (metavar "<dimension>"))
-               <*> switch (short 'm' <>
-                           long "metadata" <>
-                           help "Use instance metadata to get authentication info")
+main :: IO ()
+main = join $ O.customExecParser defaultPrefs opts
+    where
+        opts = O.info parser $ O.header "AWS CloudWatch PutMetricData client"
+        parser = O.subparser
+            ( O.command "value" (O.info
+                (put <$> putMetricData)
+                (O.progDesc "put a value metric"))
+           <> O.command "units" (O.info
+               (O.pure units)
+               (O.progDesc "list all metric units"))
+            )

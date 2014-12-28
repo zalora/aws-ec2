@@ -28,6 +28,7 @@ createTopic = CreateTopic
 
 main :: IO ()
 main = O.customExecParser defaultPrefs opts >>= put
-  where
-    opts = O.info (O.helper <*> createTopic)
-      (O.header "AWS SNS CreateTopic client")
+    where
+        opts = O.info
+            (O.helper <*> createTopic)
+            (O.header "AWS SNS CreateTopic client")

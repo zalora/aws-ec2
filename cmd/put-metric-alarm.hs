@@ -37,6 +37,7 @@ putMetricAlarm = PutMetricAlarm
 
 main :: IO ()
 main = O.customExecParser defaultPrefs opts >>= put
-  where
-    opts = O.info (O.helper <*> putMetricAlarm)
-      (O.header "AWS CloudWatch PutMetricAlarm client")
+    where
+        opts = O.info
+            (O.helper <*> putMetricAlarm)
+            (O.header "AWS CloudWatch PutMetricAlarm client")
