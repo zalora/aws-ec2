@@ -35,6 +35,7 @@ data PutMetricAlarm = PutMetricAlarm
     , ma_name :: Text
     , ma_namespace :: Text
     , ma_period :: Integer
+    , ma_region :: Text
     , ma_statistic :: Statistic
     , ma_threshold :: Double
     , ma_unit :: Maybe Unit
@@ -54,5 +55,6 @@ instance SignQuery PutMetricAlarm where
         , ("ComparisonOperator", qShow ma_comparisonOperator)
         , ("MetricName", qArg ma_metricName)
         ] +++ enumerate "AlarmActions.member" ma_alarmActions qArg
+          +++ enumerateDimensions ma_dimensions
 
 queryValueTransaction ''PutMetricAlarm "PutMetricAlarmResponse"

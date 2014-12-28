@@ -2,53 +2,32 @@
 
 module Main where
 
-import Control.Monad
-import Options.Applicative
+import qualified Options.Applicative as O
 
-import qualified Data.ByteString.Char8 as B
-import qualified Data.Text as T
-import qualified Data.HashMap.Strict as M
+import Aws (simpleAws)
+import Data.Text.Encoding (encodeUtf8)
+import Options.Applicative ((<*>), (<$>))
 
-import qualified Aws
-import Aws (Configuration(..), LogLevel(..), defaultLog)
 import Aws.SNS
-import Aws.Query
-import Aws.Core (AsMemoryResponse(..))
+import Aws.Cmd
 
-configuration :: Bool -> IO Configuration
-configuration useMetadata = do
-    cr <- load
-    case cr of
-      Nothing -> error "could not locate aws credentials"
-      Just cr' -> return Configuration { timeInfo = Aws.Timestamp
-                                       , credentials = cr'
-                                       , logger = defaultLog Warning
-                                       }
-  where
-    load = if useMetadata then Aws.loadCredentialsFromInstanceMetadata
-                          else Aws.loadCredentialsDefault
 
-put :: String -> String -> Bool -> IO ()
-put region name useMetadata = do
-    cfg <- configuration useMetadata
-    response <- Aws.simpleAws cfg (QueryAPIConfiguration $ B.pack region)
-        CreateTopic { ct_name = T.pack name }
+put :: CreateTopic -> IO ()
+put ct = do
+    cfg <- defaultConfiguration
+    response <- simpleAws cfg (QueryAPIConfiguration $ encodeUtf8 $ ct_region ct) ct
     print response
     return ()
 
-main = join $ customExecParser prefs opts
+
+createTopic :: O.Parser CreateTopic
+createTopic = CreateTopic
+    <$> O.option text (makeOption "region")
+    <*> O.option text (makeOption "name")
+
+
+main :: IO ()
+main = O.customExecParser defaultPrefs opts >>= put
   where
-    prefs = ParserPrefs { prefMultiSuffix = ""
-                        , prefDisambiguate = True
-                        , prefShowHelpOnError = True
-                        , prefBacktrack = True
-                        , prefColumns = 80
-                        }
-
-    opts = info parser $ header "AWS SNS CreateTopic client"
-
-    parser = put <$> argument str (metavar "<region>")
-                 <*> argument str (metavar "<name>")
-                 <*> switch (short 'm' <>
-                             long "metadata" <>
-                             help "Use instance metadata to get authentication info")
+    opts = O.info (O.helper <*> createTopic)
+      (O.header "AWS SNS CreateTopic client")

@@ -8,19 +8,15 @@
 
 module Aws.SNS.Commands.CreateTopic where
 
-import qualified Data.Text as T
-
-import Data.Text (Text)
-import Data.Monoid
-import Data.Time.Clock (UTCTime)
-import Aws.SNS.Core
-import Aws.TH
 import Aws.Core (SignQuery(..))
-import Aws.Query
+import Data.Text (Text)
+
 import Aws.Query.TH
+import Aws.SNS.Core
 
 data CreateTopic = CreateTopic
-    { ct_name :: Text
+    { ct_region :: Text
+    , ct_name :: Text
     } deriving (Show)
 
 instance SignQuery CreateTopic where

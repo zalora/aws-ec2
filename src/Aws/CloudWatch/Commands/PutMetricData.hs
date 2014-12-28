@@ -34,13 +34,6 @@ data StatisticSet = StatisticSet { ss_maximum :: Double
 data PutMetricData = PutMetricData Text [MetricDatum]
                    deriving (Show)
 
-enumerateDimensions :: [Dimension] -> Query
-enumerateDimensions = enumerateLists "Dimensions.member." . fmap unroll
-  where
-    unroll Dimension{..} = [ ("Name", qArg di_name)
-                           , ("Value", qArg di_value)
-                           ]
-
 enumerateMetrics :: [MetricDatum] -> Query
 enumerateMetrics = enumerateLists "MetricData.member." . fmap unroll
   where

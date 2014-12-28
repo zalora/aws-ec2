@@ -19,18 +19,7 @@ import qualified Data.HashMap.Strict as M
 import qualified Data.Vector as V
 import Data.Aeson
 
-configuration :: Bool -> IO Configuration
-configuration useMetadata = do
-    cr <- load
-    case cr of
-      Nothing -> error "could not locate aws credentials"
-      Just cr' -> return Configuration { timeInfo = Timestamp
-                                       , credentials = cr'
-                                       , logger = defaultLog Warning
-                                       }
-  where
-    load = if useMetadata then loadCredentialsFromInstanceMetadata
-                          else loadCredentialsDefault
+import Aws.Cmd
 
 runInst :: String -> String -> String -> Maybe String -> Bool -> Bool -> IO ()
 runInst region imageid instType subnetId publicIp useMetadata = do

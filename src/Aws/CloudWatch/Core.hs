@@ -7,9 +7,11 @@ module Aws.CloudWatch.Core (
 , module Aws.Query.TH
 , Dimension (..)
 , cwSignQuery
+, enumerateDimensions
 ) where
 
 import qualified Data.ByteString as B
+import qualified Data.Text as T
 import Network.HTTP.Types hiding (Method)
 import Aws.Core
 import Aws.Query
@@ -18,6 +20,20 @@ import Aws.Query.TH
 data Dimension = Dimension { di_name :: Text
                            , di_value :: Text
                            } deriving (Show, Eq)
+
+instance Read Dimension where
+    readsPrec _ v = [(dimension, "")]
+        where
+            dimension = uncurry Dimension $ group $ T.split (== '=') $ T.pack v
+            -- TODO: handle matching error
+            group [x, y] = (x, y)
+
+enumerateDimensions :: [Dimension] -> Query
+enumerateDimensions = enumerateLists "Dimensions.member." . fmap unroll
+  where
+    unroll Dimension{..} = [ ("Name", qArg di_name)
+                           , ("Value", qArg di_value)
+                           ]
 
 cwSignQuery :: Query -> QueryAPIConfiguration qt -> SignatureData -> SignedQuery
 cwSignQuery query QueryAPIConfiguration{..} = v2SignQuery query qd

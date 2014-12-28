@@ -1,7 +1,8 @@
 {-# LANGUAGE RecordWildCards #-}
 
 module Aws.SNS.Core (
-  defVersion
+  module Aws.Query
+, defVersion
 , snsSignQuery
 ) where
 
