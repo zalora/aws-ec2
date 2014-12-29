@@ -17,15 +17,6 @@ import Aws.CloudWatch.Core
 import Aws.CloudWatch.Types
 import Aws.TH
 
-data Statistic = SampleCount | Average | Sum | Minimum | Maximum
-derivePatchedShowRead ''Statistic patchPer
-
-data ComparisonOperator = GreaterThanOrEqualToThreshold
-                        | GreaterThanThreshold
-                        | LessThanThreshold
-                        | LessThanOrEqualToThreshold
-derivePatchedShowRead ''ComparisonOperator patchPer
-
 data PutMetricAlarm = PutMetricAlarm
     { ma_alarmActions :: [Text]
     , ma_comparisonOperator :: ComparisonOperator
@@ -39,6 +30,7 @@ data PutMetricAlarm = PutMetricAlarm
     , ma_statistic :: Statistic
     , ma_threshold :: Double
     , ma_unit :: Maybe Unit
+    , ma_createTopic :: Bool
     } deriving (Show)
 
 instance SignQuery PutMetricAlarm where

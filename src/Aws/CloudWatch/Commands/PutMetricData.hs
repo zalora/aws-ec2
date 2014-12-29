@@ -32,13 +32,22 @@ data StatisticSet = StatisticSet { ss_maximum :: Double
                                  } deriving (Show, Eq)
 
 data PutMetricData = PutMetricData
-    { pmd_region :: Text
-    , pmd_namespace :: Text
+    { pmd_dimensions :: [Dimension]
     , pmd_metricName :: Text
+    , pmd_namespace :: Text
+    , pmd_region :: Text
+    , pmd_unit :: Maybe Unit
     , pmd_value :: Double
-    , pmd_unit :: Unit
-    , pmd_dimensions :: [Dimension]
     , pmd_useMetadata :: Bool
+
+    , pmd_alarmActions :: [Text]
+    , pmd_alarmName :: Maybe Text
+    , pmd_comparisonOperator :: Maybe ComparisonOperator
+    , pmd_evaluationPeriods :: Maybe Integer
+    , pmd_period :: Maybe Integer
+    , pmd_statistic :: Maybe Statistic
+    , pmd_threshold :: Maybe Double
+
     } deriving (Show)
 
 enumerateMetrics :: [MetricDatum] -> Query
@@ -66,7 +75,7 @@ instance SignQuery PutMetricData where
             where metric = MetricDatum { md_dimensions = pmd_dimensions
                                        , md_metricName = pmd_metricName
                                        , md_timestamp = Nothing
-                                       , md_unit = Just $ pmd_unit
+                                       , md_unit = pmd_unit
                                        , md_value = MetricValue $ pmd_value
                                        }
 

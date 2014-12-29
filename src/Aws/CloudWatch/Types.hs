@@ -33,5 +33,13 @@ data Unit = Seconds
           | CountPerSecond
           | None
           deriving (Eq, Enum)
-
 derivePatchedShowRead ''Unit patchPer
+
+data Statistic = SampleCount | Average | Sum | Minimum | Maximum
+derivePatchedShowRead ''Statistic patchPer
+
+data ComparisonOperator = GreaterThanOrEqualToThreshold
+                        | GreaterThanThreshold
+                        | LessThanThreshold
+                        | LessThanOrEqualToThreshold
+derivePatchedShowRead ''ComparisonOperator patchPer
