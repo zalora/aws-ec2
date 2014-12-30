@@ -16,7 +16,7 @@ import Aws.Cmd
 
 put :: PutMetricData -> IO ()
 put pmd = do
-    cfg <- configuration $ pmd_useMetadata pmd
+    cfg <- defaultConfiguration
     simpleAws cfg (QueryAPIConfiguration $ encodeUtf8 $ pmd_region pmd) $ pmd
     return ()
 
@@ -33,22 +33,6 @@ putMetricData = PutMetricData
     <*> O.option text (makeOption "region")
     <*> O.optional (O.option O.auto (makeOption "unit"))
     <*> O.option O.auto (makeOption "value")
-
-    -- TODO: clarify whether this is useful
-    <*> O.switch ( O.short 'm'
-                <> O.long "metadata"
-                <> O.help "Use instance metadata to get authentication info"
-                 )
-
-    -- The following options are for alarms.
-    -- TODO: They should be missing or given altogether.
-    <*> O.many (O.option text (makeOption "alarmActions"))
-    <*> O.optional (O.option text (makeOption "alarmName"))
-    <*> O.optional (O.option O.auto (makeOption "comparisonOperator"))
-    <*> O.optional (O.option O.auto (makeOption "evaluationPeriods"))
-    <*> O.optional (O.option O.auto (makeOption "period"))
-    <*> O.optional (O.option O.auto (makeOption "statistic"))
-    <*> O.optional (O.option O.auto (makeOption "threshold"))
 
 
 main :: IO ()

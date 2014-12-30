@@ -38,16 +38,6 @@ data PutMetricData = PutMetricData
     , pmd_region :: Text
     , pmd_unit :: Maybe Unit
     , pmd_value :: Double
-    , pmd_useMetadata :: Bool
-
-    , pmd_alarmActions :: [Text]
-    , pmd_alarmName :: Maybe Text
-    , pmd_comparisonOperator :: Maybe ComparisonOperator
-    , pmd_evaluationPeriods :: Maybe Integer
-    , pmd_period :: Maybe Integer
-    , pmd_statistic :: Maybe Statistic
-    , pmd_threshold :: Maybe Double
-
     } deriving (Show)
 
 enumerateMetrics :: [MetricDatum] -> Query
