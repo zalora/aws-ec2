@@ -17,20 +17,32 @@ import Aws.CloudWatch.Core
 import Aws.CloudWatch.Types
 import Aws.TH
 
+data PutMetricAlarmOption = PutMetricAlarmOption
+    { pmao_comparisonOperator :: ComparisonOperator
+    , pmao_dimensions :: [Dimension]
+    , pmao_evaluationPeriods :: Integer
+    , pmao_metricName :: Text
+    , pmao_alarmName :: Text
+    , pmao_namespace :: Text
+    , pmao_period :: Integer
+    , pmao_region :: Text
+    , pmao_statistic :: Statistic
+    , pmao_threshold :: Double
+    , pmao_unit :: Maybe Unit
+    , pmao_createTopic :: Bool
+    } deriving (Show)
+
 data PutMetricAlarm = PutMetricAlarm
-    { ma_alarmActions :: [Text]
-    , ma_comparisonOperator :: ComparisonOperator
-    , ma_dimensions :: [Dimension]
-    , ma_evaluationPeriods :: Integer
-    , ma_metricName :: Text
-    , ma_name :: Text
-    , ma_namespace :: Text
-    , ma_period :: Integer
-    , ma_region :: Text
-    , ma_statistic :: Statistic
-    , ma_threshold :: Double
-    , ma_unit :: Maybe Unit
-    , ma_createTopic :: Bool
+    { pma_alarmActions :: [Text]
+    , pma_comparisonOperator :: ComparisonOperator
+    , pma_dimensions :: [Dimension]
+    , pma_evaluationPeriods :: Integer
+    , pma_metricName :: Text
+    , pma_name :: Text
+    , pma_namespace :: Text
+    , pma_period :: Integer
+    , pma_statistic :: Statistic
+    , pma_threshold :: Double
     } deriving (Show)
 
 instance SignQuery PutMetricAlarm where
@@ -38,15 +50,15 @@ instance SignQuery PutMetricAlarm where
     signQuery PutMetricAlarm{..} = cwSignQuery $
         [ ("Action", qArg "PutMetricAlarm")
         , ("Version", qArg "2010-08-01")
-        , ("Namespace", qArg ma_namespace)
-        , ("AlarmName", qArg ma_name)
-        , ("Period", qShow ma_period)
-        , ("EvaluationPeriods", qShow ma_evaluationPeriods)
-        , ("Threshold", qShow ma_threshold)
-        , ("Statistic", qShow ma_statistic)
-        , ("ComparisonOperator", qShow ma_comparisonOperator)
-        , ("MetricName", qArg ma_metricName)
-        ] +++ enumerate "AlarmActions.member" ma_alarmActions qArg
-          +++ enumerateDimensions ma_dimensions
+        , ("Namespace", qArg pma_namespace)
+        , ("AlarmName", qArg pma_name)
+        , ("Period", qShow pma_period)
+        , ("EvaluationPeriods", qShow pma_evaluationPeriods)
+        , ("Threshold", qShow pma_threshold)
+        , ("Statistic", qShow pma_statistic)
+        , ("ComparisonOperator", qShow pma_comparisonOperator)
+        , ("MetricName", qArg pma_metricName)
+        ] +++ enumerate "AlarmActions.member" pma_alarmActions qArg
+          +++ enumerateDimensions pma_dimensions
 
 queryValueTransaction ''PutMetricAlarm "PutMetricAlarmResponse"

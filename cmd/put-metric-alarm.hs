@@ -5,6 +5,7 @@
 
 module Main where
 
+import qualified Data.HashMap.Strict as HM
 import qualified Options.Applicative as O
 
 import Aws (simpleAws)
@@ -16,23 +17,39 @@ import Aws.CloudWatch
 import Aws.SNS
 
 
-put :: PutMetricAlarm -> IO ()
-put pma@PutMetricAlarm{..} = do
+put :: PutMetricAlarmOption -> IO ()
+put pmao@PutMetricAlarmOption{..} = do
     cfg <- defaultConfiguration
-    simpleAws cfg (QueryAPIConfiguration $ encodeUtf8 $ ma_region) pma
-    if ma_createTopic
-    then do
-        simpleAws cfg (QueryAPIConfiguration $ encodeUtf8 $ ma_region) ct
-        return ()
-    else return ()
-    where ct = CreateTopic { ct_region = ma_region
-                           , ct_name = ma_name }
+    actions <- if pmao_createTopic
+        then do
+            Object r <- simpleAws cfg (QueryAPIConfiguration $ encodeUtf8 $ pmao_region) ct
+            case HM.lookup "CreateTopicResult" r of
+                Just (Object r2) ->
+                    case HM.lookup "TopicArn" r2 of
+                        Just (String r3) -> return [r3]
+        else return []
+    simpleAws cfg (QueryAPIConfiguration $ encodeUtf8 $ pmao_region) $ pma actions
+    return ()
+    where
+        pma actions = PutMetricAlarm
+            { pma_alarmActions = actions
+            , pma_comparisonOperator = pmao_comparisonOperator
+            , pma_dimensions = pmao_dimensions
+            , pma_evaluationPeriods = pmao_evaluationPeriods
+            , pma_metricName = pmao_metricName
+            , pma_name = pmao_alarmName
+            , pma_namespace = pmao_namespace
+            , pma_period = pmao_period
+            , pma_statistic = pmao_statistic
+            , pma_threshold = pmao_threshold
+            }
+        ct = CreateTopic { ct_region = pmao_region
+                         , ct_name = pmao_alarmName }
 
 
-putMetricAlarm :: O.Parser PutMetricAlarm
-putMetricAlarm = PutMetricAlarm
-    <$> O.many (O.option text (makeOption "alarmActions"))
-    <*> O.option O.auto (makeOption "comparisonOperator")
+putMetricAlarm :: O.Parser PutMetricAlarmOption
+putMetricAlarm = PutMetricAlarmOption
+    <$> O.option O.auto (makeOption "comparisonOperator")
     <*> O.many (O.option O.auto (makeOption "dimension"))
     <*> O.option O.auto (makeOption "evaluationPeriods")
     <*> O.option text (makeOption "metricName")

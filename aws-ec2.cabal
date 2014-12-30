@@ -134,6 +134,7 @@ executable put-metric-alarm
     , optparse-applicative
     , aws >= 0.9.4
     , aws-ec2
+    , unordered-containers
 
   hs-source-dirs:      cmd
   default-language:    Haskell2010
