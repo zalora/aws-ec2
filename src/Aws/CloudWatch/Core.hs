@@ -22,11 +22,9 @@ data Dimension = Dimension { di_name :: Text
                            } deriving (Show, Eq)
 
 instance Read Dimension where
-    readsPrec _ v = [(dimension, "")]
-        where
-            dimension = uncurry Dimension $ group $ T.split (== '=') $ T.pack v
-            -- TODO: handle matching error
-            group [x, y] = (x, y)
+    readsPrec _ v = case T.split (== '=') $ T.pack v of
+        [x, y] -> [(Dimension x y, "")]
+        _ -> []
 
 enumerateDimensions :: [Dimension] -> Query
 enumerateDimensions = enumerateLists "Dimensions.member." . fmap unroll
