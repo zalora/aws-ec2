@@ -8,30 +8,11 @@
 
 module Aws.CloudWatch.Commands.PutMetricAlarm where
 
-import qualified Data.Text as T
-
 import Data.Text (Text)
-import Data.Monoid
-import Data.Time.Clock (UTCTime)
 import Aws.CloudWatch.Core
 import Aws.CloudWatch.Types
 import Aws.TH
 
-data PutMetricAlarmOption = PutMetricAlarmOption
-    { pmao_comparisonOperator :: ComparisonOperator
-    , pmao_dimensions :: [Dimension]
-    , pmao_evaluationPeriods :: Integer
-    , pmao_metricName :: Text
-    , pmao_alarmName :: Text
-    , pmao_namespace :: Text
-    , pmao_period :: Integer
-    , pmao_region :: Text
-    , pmao_statistic :: Statistic
-    , pmao_threshold :: Double
-    , pmao_unit :: Maybe Unit
-    , pmao_createTopic :: Bool
-    , pmao_notificationEmails :: [Text]
-    } deriving (Show)
 
 data PutMetricAlarm = PutMetricAlarm
     { pma_alarmActions :: [Text]

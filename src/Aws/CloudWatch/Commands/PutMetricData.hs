@@ -66,7 +66,7 @@ instance SignQuery PutMetricData where
                                        , md_metricName = pmd_metricName
                                        , md_timestamp = Nothing
                                        , md_unit = pmd_unit
-                                       , md_value = MetricValue $ pmd_value
+                                       , md_value = MetricValue pmd_value
                                        }
 
 QUERYVALUETRANSACTION(PutMetricData,"PutMetricDataResponse")

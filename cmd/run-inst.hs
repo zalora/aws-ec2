@@ -10,9 +10,8 @@ import Options.Applicative
 import qualified Data.ByteString.Char8 as B
 import qualified Data.Text as T
 
-import Aws
 import Aws.Query hiding (optional)
-import Aws (Configuration(..), LogLevel(..), defaultLog)
+import Aws (simpleAws, Configuration(..), LogLevel(..), defaultLog)
 import Aws.Ec2
 import qualified Data.Yaml as Y
 import qualified Data.HashMap.Strict as M
@@ -24,7 +23,7 @@ import Aws.Cmd
 runInst :: String -> String -> String -> Maybe String -> Bool -> Bool -> IO ()
 runInst region imageid instType subnetId publicIp useMetadata = do
     cfg <- configuration useMetadata
-    val <- Aws.simpleAws cfg (QueryAPIConfiguration $ B.pack region) $
+    val <- simpleAws cfg (QueryAPIConfiguration $ B.pack region) $
       RunInstances
         (T.pack imageid)
         (1,1)
@@ -50,21 +49,21 @@ runInst region imageid instType subnetId publicIp useMetadata = do
 listInst :: String -> Bool -> IO ()
 listInst region useMetadata = do
     cfg <- configuration useMetadata
-    inst <- Aws.simpleAws cfg (QueryAPIConfiguration $ B.pack region) $ DescribeInstances []
+    inst <- simpleAws cfg (QueryAPIConfiguration $ B.pack region) $ DescribeInstances []
     B.putStr $ Y.encode inst
     return ()
 
 listImg :: String -> Bool -> IO ()
 listImg region useMetadata = do
     cfg <- configuration useMetadata
-    imageSet <- Aws.simpleAws cfg (QueryAPIConfiguration $ B.pack region) $ DescribeImages []
+    imageSet <- simpleAws cfg (QueryAPIConfiguration $ B.pack region) $ DescribeImages []
     B.putStr $ Y.encode imageSet
     return ()
 
 listStatus :: String -> String -> Bool -> IO ()
 listStatus region instanceid useMetadata = do
     cfg <- configuration useMetadata
-    imageSet <- Aws.simpleAws cfg (QueryAPIConfiguration $ B.pack region) $ DescribeInstanceStatus [T.pack instanceid]
+    imageSet <- simpleAws cfg (QueryAPIConfiguration $ B.pack region) $ DescribeInstanceStatus [T.pack instanceid]
     B.putStr $ Y.encode imageSet
     return ()
 
@@ -72,21 +71,21 @@ listStatus region instanceid useMetadata = do
 termInst :: String -> String -> Bool -> IO ()
 termInst region instanceid useMetadata = do
     cfg <- configuration useMetadata
-    imageSet <- Aws.simpleAws cfg (QueryAPIConfiguration $ B.pack region) $ TerminateInstances [T.pack instanceid]
+    imageSet <- simpleAws cfg (QueryAPIConfiguration $ B.pack region) $ TerminateInstances [T.pack instanceid]
     B.putStr $ Y.encode imageSet
     return ()
 
 startInst :: String -> String -> Bool -> IO ()
 startInst region instanceid useMetadata = do
     cfg <- configuration useMetadata
-    imageSet <- Aws.simpleAws cfg (QueryAPIConfiguration $ B.pack region) $ StartInstances [T.pack instanceid]
+    imageSet <- simpleAws cfg (QueryAPIConfiguration $ B.pack region) $ StartInstances [T.pack instanceid]
     B.putStr $ Y.encode imageSet
     return ()
 
 stopInst :: String -> String -> Bool -> IO ()
 stopInst region instanceid useMetadata = do
     cfg <- configuration useMetadata
-    imageSet <- Aws.simpleAws cfg (QueryAPIConfiguration $ B.pack region) $ StopInstances [T.pack instanceid]
+    imageSet <- simpleAws cfg (QueryAPIConfiguration $ B.pack region) $ StopInstances [T.pack instanceid]
     B.putStr $ Y.encode imageSet
     return ()
 

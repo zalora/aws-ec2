@@ -1,21 +1,18 @@
 {-# LANGUAGE RecordWildCards #-}
 
-module Aws.CloudWatch.Core (
-  module Network.HTTP.Types
-, module Aws.Core
-, module Aws.Query
-, module Aws.Query.TH
-, Dimension (..)
-, cwSignQuery
-, enumerateDimensions
-) where
+module Aws.CloudWatch.Core
+    ( Dimension(..)
+    , cwSignQuery
+    , enumerateDimensions
+    , module X) where
+import Network.HTTP.Types as X hiding (Method)
+import Aws.Core as X
+import Aws.Query as X
+import Aws.Query.TH as X
 
 import qualified Data.ByteString as B
 import qualified Data.Text as T
-import Network.HTTP.Types hiding (Method)
-import Aws.Core
-import Aws.Query
-import Aws.Query.TH
+
 
 data Dimension = Dimension { di_name :: Text
                            , di_value :: Text

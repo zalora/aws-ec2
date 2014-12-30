@@ -14,10 +14,10 @@ import Aws.CloudWatch
 import Aws.Cmd
 
 
-put :: PutMetricData -> IO ()
-put pmd = do
+putMetric :: PutMetricData -> IO ()
+putMetric pmd = do
     cfg <- defaultConfiguration
-    simpleAws cfg (QueryAPIConfiguration $ encodeUtf8 $ pmd_region pmd) $ pmd
+    simpleAws cfg (QueryAPIConfiguration $ encodeUtf8 $ pmd_region pmd) pmd
     return ()
 
 
@@ -25,8 +25,8 @@ units :: IO ()
 units = mapM_ print $ enumFrom Seconds
 
 
-putMetricData :: O.Parser PutMetricData
-putMetricData = PutMetricData
+putMetricParser :: O.Parser PutMetricData
+putMetricParser = PutMetricData
     <$> O.many (O.option O.auto (makeOption "dimension"))
     <*> O.option text (makeOption "metricName")
     <*> O.option text (makeOption "namespace")
@@ -41,7 +41,7 @@ main = join $ O.customExecParser defaultPrefs opts
         opts = O.info parser $ O.header "AWS CloudWatch PutMetricData client"
         parser = O.subparser
             ( O.command "value" (O.info
-                (put <$> putMetricData)
+                (putMetric <$> putMetricParser)
                 (O.progDesc "put a value metric"))
            <> O.command "units" (O.info
                (O.pure units)
