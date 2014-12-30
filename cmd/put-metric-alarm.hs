@@ -8,7 +8,7 @@ module Main where
 import qualified Data.HashMap.Strict as HM
 import qualified Options.Applicative as O
 
-import Aws (simpleAws)
+import Aws (simpleAws, Configuration)
 import Data.Text.Encoding (encodeUtf8)
 import Options.Applicative ((<*>), (<$>))
 
@@ -20,17 +20,29 @@ import Aws.SNS
 put :: PutMetricAlarmOption -> IO ()
 put pmao@PutMetricAlarmOption{..} = do
     cfg <- defaultConfiguration
+    -- TODO: refactor this messy nested code
     actions <- if pmao_createTopic
         then do
             Object r <- simpleAws cfg (QueryAPIConfiguration $ encodeUtf8 $ pmao_region) ct
             case HM.lookup "CreateTopicResult" r of
                 Just (Object r2) ->
                     case HM.lookup "TopicArn" r2 of
-                        Just (String r3) -> return [r3]
+                        Just (String r3) -> do
+                            mapM (subscribe cfg r3) pmao_notificationEmails
+                            return [r3]
         else return []
     simpleAws cfg (QueryAPIConfiguration $ encodeUtf8 $ pmao_region) $ pma actions
     return ()
     where
+        subscribe :: Configuration -> Text -> Text -> IO ()
+        subscribe cfg arn endpoint = do
+            simpleAws cfg (QueryAPIConfiguration $ encodeUtf8 $ pmao_region) $ subscribeCmd arn endpoint
+            -- TODO: eliminate this ugly return
+            return ()
+        subscribeCmd topicArn endpoint = Subscribe { s_endpoint = endpoint
+                                                   , s_protocol = "email"
+                                                   , s_topicArn = topicArn
+                                                   }
         pma actions = PutMetricAlarm
             { pma_alarmActions = actions
             , pma_comparisonOperator = pmao_comparisonOperator
@@ -61,6 +73,7 @@ putMetricAlarm = PutMetricAlarmOption
     <*> O.option O.auto (makeOption "threshold")
     <*> O.optional (O.option O.auto (makeOption "unit"))
     <*> O.switch (O.long "createTopic")
+    <*> O.many (O.option text (makeOption "notificationEmail"))
 
 
 main :: IO ()

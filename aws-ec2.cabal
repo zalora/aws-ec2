@@ -93,6 +93,7 @@ library
     , Aws.SNS
     , Aws.SNS.Core
     , Aws.SNS.Commands.CreateTopic
+    , Aws.SNS.Commands.Subscribe
 
   build-depends:
       base >=4 && <5

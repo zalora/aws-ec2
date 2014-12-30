@@ -30,6 +30,7 @@ data PutMetricAlarmOption = PutMetricAlarmOption
     , pmao_threshold :: Double
     , pmao_unit :: Maybe Unit
     , pmao_createTopic :: Bool
+    , pmao_notificationEmails :: [Text]
     } deriving (Show)
 
 data PutMetricAlarm = PutMetricAlarm
