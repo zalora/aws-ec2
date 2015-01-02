@@ -5,18 +5,14 @@
 
 module Main where
 
-import qualified Data.HashMap.Strict as HM
 import qualified Options.Applicative as O
 
-import Aws (simpleAws, Configuration)
+import Aws (simpleAws)
 import Data.Text.Encoding (encodeUtf8)
 import Options.Applicative ((<*>), (<$>))
-import Data.Aeson.Types (Object(..))
-import Control.Monad ((>=>))
 
 import Aws.Cmd
 import Aws.CloudWatch
-import Aws.SNS
 
 
 data CreateAlarm = CreateAlarm
@@ -31,54 +27,20 @@ data CreateAlarm = CreateAlarm
     , ca_statistic :: Statistic
     , ca_threshold :: Double
     , ca_unit :: Maybe Unit
-    , ca_createTopic :: Bool
+    , ca_topicArn :: Text
     , ca_notificationEmails :: [Text]
     } deriving (Show)
-
-
-createTopic cfg queryAPIConfiguration createCmd = do
-    result <- simpleAws cfg queryAPIConfiguration createCmd
-    case getArn result of
-        Just arn -> return arn
-        _ -> do
-            print result
-            fail "Cannot create topic!"
-    where
-
-        getArn :: Value -> Maybe Text
-        getArn = anObject >=> HM.lookup "CreateTopicResult" >=> anObject
-                          >=> HM.lookup "TopicArn" >=> aString
-
-        anObject :: Value -> Maybe Object
-        anObject (Object v) = Just v
-        anObject _ = Nothing
-
-        aString :: Value -> Maybe Text
-        aString (String s) = Just s
-        aString _ = Nothing
 
 
 createAlarm :: CreateAlarm -> IO ()
 createAlarm ca@CreateAlarm{..} = do
     cfg <- defaultConfiguration
-    actions <- if ca_createTopic
-        then do
-            arn <- createTopic cfg queryAPIConfiguration createCmd
-            mapM_ (subscribe cfg arn) ca_notificationEmails
-            return [arn]
-        else return []
-    simpleAws cfg queryAPIConfiguration $ pma actions
+    simpleAws cfg queryAPIConfiguration pma
     return ()
     where
         queryAPIConfiguration = QueryAPIConfiguration $ encodeUtf8 ca_region
-        subscribe cfg arn endpoint =
-            simpleAws cfg queryAPIConfiguration $ subscribeCmd arn endpoint
-        subscribeCmd topicArn endpoint = Subscribe { s_endpoint = endpoint
-                                                   , s_protocol = "email"
-                                                   , s_topicArn = topicArn
-                                                   }
-        pma actions = PutMetricAlarm
-            { pma_alarmActions = actions
+        pma = PutMetricAlarm
+            { pma_alarmActions = [ca_topicArn]
             , pma_comparisonOperator = ca_comparisonOperator
             , pma_dimensions = ca_dimensions
             , pma_evaluationPeriods = ca_evaluationPeriods
@@ -89,8 +51,6 @@ createAlarm ca@CreateAlarm{..} = do
             , pma_statistic = ca_statistic
             , pma_threshold = ca_threshold
             }
-        createCmd = CreateTopic { ct_region = ca_region
-                                , ct_name = ca_alarmName }
 
 
 createAlarmParser :: O.Parser CreateAlarm
@@ -106,7 +66,7 @@ createAlarmParser = CreateAlarm
     <*> O.option O.auto (makeOption "statistic")
     <*> O.option O.auto (makeOption "threshold")
     <*> O.optional (O.option O.auto (makeOption "unit"))
-    <*> O.switch (O.long "createTopic")
+    <*> O.option text (makeOption "topicArn")
     <*> O.many (O.option text (makeOption "notificationEmail"))
 
 
