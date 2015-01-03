@@ -33,4 +33,4 @@ instance SignQuery CreateTags where
                                            ] +++ enumerate "ResourceId" ct_resources qArg
                                              +++ enumerateTags ct_tags
 
-ec2ValueTransaction ''CreateTags "return"
+EC2VALUETRANSACTION(CreateTags,"return")

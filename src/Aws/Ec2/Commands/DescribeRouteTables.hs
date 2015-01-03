@@ -22,4 +22,4 @@ instance SignQuery DescribeRouteTables where
                                            , ("Filter.1.Value.1", qArg drt_vpcId)
                                            ]
 
-ec2ValueTransaction ''DescribeRouteTables "routeTableSet"
+EC2VALUETRANSACTION(DescribeRouteTables,"routeTableSet")

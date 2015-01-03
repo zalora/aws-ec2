@@ -25,4 +25,4 @@ instance SignQuery AttachInternetGateway where
                                            , defVersion
                                            ]
 
-ec2ValueTransaction ''AttachInternetGateway "return"
+EC2VALUETRANSACTION(AttachInternetGateway,"return")

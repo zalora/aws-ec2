@@ -10,4 +10,4 @@ import Aws.Ec2.TH
 data DescribeSubnets = DescribeSubnets [Text]
                        deriving (Show)
 
-ec2ValueTransactionDef ''DescribeSubnets 'DescribeSubnets "subnetSet" "SubnetId"
+EC2VALUETRANSACTIONDEF(DescribeSubnets,"DescribeSubnets","subnetSet","SubnetId")

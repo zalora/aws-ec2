@@ -13,4 +13,4 @@ import Aws.Ec2.TH
 data DescribeInstanceStatus = DescribeInstanceStatus { dis_instanceIds :: [Text] }
                        deriving (Show)
 
-ec2ValueTransactionDef ''DescribeInstanceStatus 'DescribeInstanceStatus "instanceStatusSet" "InstanceId"
+EC2VALUETRANSACTIONDEF(DescribeInstanceStatus,"DescribeInstanceStatus","instanceStatusSet","InstanceId")

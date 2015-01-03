@@ -12,4 +12,4 @@ import Aws.Elb.TH
 
 data DescribeLoadBalancers = DescribeLoadBalancers [Text]
 
-elbValueTransactionDef ''DescribeLoadBalancers 'DescribeLoadBalancers "LoadBalancerDescriptions" "LoadBalancerNames.member"
+ELBVALUETRANSACTIONDEF(DescribeLoadBalancers,"DescribeLoadBalancers","LoadBalancerDescriptions","LoadBalancerNames.member")

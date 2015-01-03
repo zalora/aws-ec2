@@ -10,4 +10,4 @@ import Aws.Ec2.TH
 data DescribeVolumeStatus = DescribeVolumeStatus [Text]
                        deriving (Show)
 
-ec2ValueTransactionDef ''DescribeVolumeStatus 'DescribeVolumeStatus "volumeStatusSet" "VolumeId"
+EC2VALUETRANSACTIONDEF(DescribeVolumeStatus,"DescribeVolumeStatus","volumeStatusSet","VolumeId")

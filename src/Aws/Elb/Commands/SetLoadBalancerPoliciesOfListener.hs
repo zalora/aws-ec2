@@ -25,4 +25,4 @@ instance SignQuery SetLoadBalancerPoliciesOfListener where
                                                     , ("LoadBalancerPort", qShow spl_loadBalancerPort)
                                                     ] +++ enumerate "PolicyNames.member" spl_policyNames qArg
 
-elbValueTransaction ''SetLoadBalancerPoliciesOfListener "SetLoadBalancerPoliciesOfListenerResult"
+ELBVALUETRANSACTION(SetLoadBalancerPoliciesOfListener,"SetLoadBalancerPoliciesOfListenerResult")

@@ -29,4 +29,4 @@ instance SignQuery GetConsoleOutput where
                                                   , ("InstanceId", qArg gco_instanceId)
                                                   ]
 
-ec2ValueTransaction ''GetConsoleOutput "GetConsoleOutputResponse"
+EC2VALUETRANSACTION(GetConsoleOutput,"GetConsoleOutputResponse")

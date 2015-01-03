@@ -67,4 +67,4 @@ instance SignQuery PutMetricData where
                                                            , ("Namespace", qArg namespace)
                                                            ] +++ enumerateMetrics xs
 
-queryValueTransaction ''PutMetricData "PutMetricDataResponse"
+QUERYVALUETRANSACTION(PutMetricData,"PutMetricDataResponse")

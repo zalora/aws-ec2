@@ -10,4 +10,4 @@ import Aws.Ec2.TH
 data DescribeRegions = DescribeRegions [Text]
                        deriving (Show)
 
-ec2ValueTransactionDef ''DescribeRegions 'DescribeRegions "regionInfo" "RegionName"
+EC2VALUETRANSACTIONDEF(DescribeRegions,"DescribeRegions","regionInfo","RegionName")
