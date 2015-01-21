@@ -82,6 +82,7 @@ library
     , Aws.Elb.Commands.ModifyLoadBalancerAttributes
     , Aws.Elb.Commands.RegisterInstancesWithLoadBalancer
     , Aws.Elb.Commands.DeregisterInstancesFromLoadBalancer
+    , Aws.Elb.Commands.CreateAppCookieStickinessPolicy
     , Aws.Elb.Commands.CreateLBCookieStickinessPolicy
     , Aws.Elb.Commands.SetLoadBalancerPoliciesOfListener
     , Aws.Elb.Commands.ConfigureHealthCheck
