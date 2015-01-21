@@ -14,6 +14,7 @@ module Aws.Elb (
 , module Aws.Elb.Commands.RegisterInstancesWithLoadBalancer
 , module Aws.Elb.Commands.DeregisterInstancesFromLoadBalancer
 
+, module Aws.Elb.Commands.CreateAppCookieStickinessPolicy
 , module Aws.Elb.Commands.CreateLBCookieStickinessPolicy
 , module Aws.Elb.Commands.SetLoadBalancerPoliciesOfListener
 
@@ -35,6 +36,7 @@ import Aws.Elb.Commands.ModifyLoadBalancerAttributes
 import Aws.Elb.Commands.RegisterInstancesWithLoadBalancer
 import Aws.Elb.Commands.DeregisterInstancesFromLoadBalancer
 
+import Aws.Elb.Commands.CreateAppCookieStickinessPolicy
 import Aws.Elb.Commands.CreateLBCookieStickinessPolicy
 import Aws.Elb.Commands.SetLoadBalancerPoliciesOfListener
 
