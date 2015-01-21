@@ -12,6 +12,8 @@ category:            Network, Web, AWS, Cloud, Distributed Computing
 homepage:            https://github.com/zalora/aws-ec2
 description:         AWS client library with focus on infrastructure services like EC2 (with VPC), ELB and CloudWatch, extension to <https://github.com/aristidb/aws>.
 
+extra-source-files:  include/config.h  
+
 source-repository this
   type: git
   location: https://github.com/zalora/aws-ec2.git
