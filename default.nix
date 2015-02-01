@@ -36,42 +36,40 @@ in
     ) ./.
 , haskellPackages ? pkgs.haskellPackages_ghc783
 }:
-with pkgs.lib;
 
 let
-  # Build a cabal package given a local .cabal file
-  buildLocalCabalWithArgs = { src
-                            , name
-                            , args ? {}
-                            , cabalDrvArgs ? { jailbreak = true; }
-                            # for import-from-derivation, want to use current system
-                            , nativePkgs ? import pkgs.path {}
-                            }: let
+  aws-ec2-expr = 
+    { cabal, aeson, aws, base16Bytestring, base64Bytestring
+    , blazeBuilder, byteable, conduitExtra, cryptohash, httpConduit
+    , httpTypes, mtl, optparseApplicative, resourcet, scientific, text
+    , time, unorderedContainers, vector, xmlConduit, yaml
+    }:
 
-    cabalExpr = shell "${name}.nix" ''
-      export HOME="$TMPDIR"
-      ${let c2n = builtins.getEnv "OVERRIDE_cabal2nix";
-        in if c2n != "" then c2n
-           else "${nativePkgs.haskellPackages.cabal2nix}/bin/cabal2nix"} \
-        ${src + "/${name}.cabal"} --sha256=FILTERME \
-          | grep -v FILTERME | sed \
-            -e 's/{ cabal/{ cabal, cabalInstall, cabalDrvArgs ? {}, src/' \
-            -e 's/cabal.mkDerivation (self: {/cabal.mkDerivation (self: cabalDrvArgs \/\/ {/' \
-            -e 's/buildDepends = \[/buildDepends = \[ cabalInstall/' \
-            -e 's/pname = \([^$]*\)/pname = \1  inherit src;/'  > $out
-    '';
-  in haskellPackages.callPackage cabalExpr ({ inherit src cabalDrvArgs; } // args);
+    cabal.mkDerivation (self: {
+      pname = "aws-ec2";
+      inherit src;
+      version = "0.3.2";
+      isLibrary = true;
+      isExecutable = true;
+      jailbreak = true;
+      buildDepends = [
+        aeson aws base16Bytestring base64Bytestring blazeBuilder byteable
+        conduitExtra cryptohash httpConduit httpTypes mtl
+        optparseApplicative resourcet scientific text time
+        unorderedContainers vector xmlConduit yaml
+      ];
+      meta = {
+        homepage = "https://github.com/zalora/aws-ec2";
+        description = "AWS EC2/VPC, ELB and CloudWatch client library for Haskell";
+        license = self.stdenv.lib.licenses.bsd3;
+        platforms = self.ghc.meta.platforms;
+      };
+    });
 
   aws = haskellPackages.callPackage ./aws.nix {};
-in
-
-rec {
-  library = buildLocalCabalWithArgs {
-    inherit src name;
-    args = {
-      inherit aws;
-    };
-  };
+  aws-ec2 = haskellPackages.callPackage aws-ec2-expr ({ inherit aws; });
+in rec {
+  library = aws-ec2;
 
   put-metric = pkgs.runCommand "${name}-put-metric" {} ''
     mkdir -p $out/bin
