@@ -75,5 +75,9 @@ in rec {
     mkdir -p $out/bin
     cp ${library}/bin/put-metric $out/bin
   '';
-}
 
+  create-alarm = pkgs.runCommand "${name}-create-alarm" {} ''
+    mkdir -p $out/bin
+    cp ${library}/bin/create-alarm $out/bin
+  '';
+}

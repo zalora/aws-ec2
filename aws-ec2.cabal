@@ -35,6 +35,7 @@ library
     , Aws.CloudWatch
     , Aws.CloudWatch.Core
     , Aws.CloudWatch.Types
+    , Aws.CloudWatch.Commands.PutMetricAlarm
     , Aws.CloudWatch.Commands.PutMetricData
 
     , Aws.Ec2
@@ -89,6 +90,11 @@ library
     , Aws.Elb.Commands.SetLoadBalancerPoliciesOfListener
     , Aws.Elb.Commands.ConfigureHealthCheck
 
+    , Aws.SNS
+    , Aws.SNS.Core
+    , Aws.SNS.Commands.CreateTopic
+    , Aws.SNS.Commands.Subscribe
+
   build-depends:
       base >=4 && <5
     , template-haskell
@@ -119,6 +125,21 @@ library
   default-language:    Haskell2010
   default-extensions:  OverloadedStrings, TemplateHaskell, CPP
   ghc-options:         -optP --include=include/config.h
+
+executable create-alarm
+  main-is: create-alarm.hs
+  build-depends:
+      base
+    , bytestring
+    , text
+    , optparse-applicative
+    , aws >= 0.9.4
+    , aws-ec2
+
+  hs-source-dirs:      cmd
+  default-language:    Haskell2010
+  default-extensions:  OverloadedStrings
+  ghc-options:         -static
 
 executable put-metric
   main-is: put-metric.hs

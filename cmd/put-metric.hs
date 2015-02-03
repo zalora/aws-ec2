@@ -2,76 +2,48 @@
 
 module Main where
 
-import Control.Monad
-import Options.Applicative
+import qualified Options.Applicative as O
 
-import qualified Data.ByteString.Char8 as B
-import qualified Data.Text as T
+import Aws (simpleAws)
+import Control.Monad (join)
+import Data.Text (split)
+import Data.Text.Encoding (encodeUtf8)
+import Options.Applicative ((<>), (<*>), (<$>))
 
-import qualified Aws
-import Aws (Configuration(..), LogLevel(..), defaultLog)
 import Aws.CloudWatch
+import Aws.Cmd
 
-configuration :: Bool -> IO Configuration
-configuration useMetadata = do
-    cr <- load
-    case cr of
-      Nothing -> error "could not locate aws credentials"
-      Just cr' -> return Configuration { timeInfo = Timestamp
-                                       , credentials = cr'
-                                       , logger = defaultLog Warning
-                                       }
-  where
-    load = if useMetadata then loadCredentialsFromInstanceMetadata
-                          else loadCredentialsDefault
 
-put :: String -> String -> String -> Double -> Unit -> String -> Bool -> IO ()
-put region namespace name value unit iodims useMetadata = do
-    cfg <- configuration useMetadata
-    m <- metric
-    Aws.simpleAws cfg (QueryAPIConfiguration $ B.pack region) $ PutMetricData (T.pack namespace) [m]
+putMetric :: PutMetricData -> IO ()
+putMetric pmd = do
+    cfg <- defaultConfiguration
+    simpleAws cfg (QueryAPIConfiguration $ encodeUtf8 $ pmd_region pmd) pmd
     return ()
-  where
-    metric = do
-      dimensions <- pairs iodims
-      return MetricDatum { md_dimensions = fmap (\(name, value) -> Dimension name value) dimensions
-                         , md_metricName = T.pack name
-                         , md_timestamp = Nothing
-                         , md_unit = Just unit
-                         , md_value = MetricValue value
-                         }
 
-pairs :: Monad m => String -> m [(Text, Text)]
-pairs = return . concat . fmap (group . T.split (== '=')) . T.split (== ',') . T.pack
-  where
-    group (x:y:xs) = (x,y) : group xs
-    group [] = []
-    group _ = fail "could not match pairs"
 
 units :: IO ()
 units = mapM_ print $ enumFrom Seconds
 
-main = join $ customExecParser prefs opts
-  where
-    prefs = ParserPrefs { prefMultiSuffix = ""
-                        , prefDisambiguate = True
-                        , prefShowHelpOnError = True
-                        , prefBacktrack = True
-                        , prefColumns = 80
-                        }
 
-    opts = parser `info` header "AWS CloudWatch PutMetricData client"
+putMetricParser :: O.Parser PutMetricData
+putMetricParser = PutMetricData
+    <$> O.many (O.option O.auto (makeOption "dimension"))
+    <*> O.option text (makeOption "metricName")
+    <*> O.option text (makeOption "namespace")
+    <*> O.option text (makeOption "region")
+    <*> O.optional (O.option O.auto (makeOption "unit"))
+    <*> O.option O.auto (makeOption "value")
 
-    parser = subparser (command "value" (args put `info` progDesc "put a value metric") <>
-                        command "units" (pure units `info` progDesc "list all metric units")
-                        )
 
-    args comm = comm <$> argument str (metavar "<region>")
-                     <*> argument str (metavar "<namespace>")
-                     <*> argument str (metavar "<metric name>")
-                     <*> argument auto (metavar "<double value>")
-                     <*> argument auto (metavar "<unit>")
-                     <*> argument str (metavar "dimension1=value1")
-                     <*> switch (short 'm' <>
-                                 long "metadata" <>
-                                 help "Use instance metadata to get authentication info")
+main :: IO ()
+main = join $ O.customExecParser defaultPrefs opts
+    where
+        opts = O.info parser $ O.header "AWS CloudWatch PutMetricData client"
+        parser = O.subparser
+            ( O.command "value" (O.info
+                (putMetric <$> putMetricParser)
+                (O.progDesc "put a value metric"))
+           <> O.command "units" (O.info
+               (O.pure units)
+               (O.progDesc "list all metric units"))
+            )

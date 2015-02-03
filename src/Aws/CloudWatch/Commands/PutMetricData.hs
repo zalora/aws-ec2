@@ -14,10 +14,6 @@ import Data.Time.Clock (UTCTime)
 import Aws.CloudWatch.Core
 import Aws.CloudWatch.Types
 
-data Dimension = Dimension { di_name :: Text
-                           , di_value :: Text
-                           } deriving (Show, Eq)
-
 data MetricDatum = MetricDatum { md_dimensions :: [Dimension]
                                , md_metricName :: Text
                                , md_timestamp :: Maybe UTCTime
@@ -35,15 +31,14 @@ data StatisticSet = StatisticSet { ss_maximum :: Double
                                  , ss_sum :: Double
                                  } deriving (Show, Eq)
 
-data PutMetricData = PutMetricData Text [MetricDatum]
-                   deriving (Show)
-
-enumerateDimensions :: [Dimension] -> Query
-enumerateDimensions = enumerateLists "Dimensions.member." . fmap unroll
-  where
-    unroll Dimension{..} = [ ("Name", qArg di_name)
-                           , ("Value", qArg di_value)
-                           ]
+data PutMetricData = PutMetricData
+    { pmd_dimensions :: [Dimension]
+    , pmd_metricName :: Text
+    , pmd_namespace :: Text
+    , pmd_region :: Text
+    , pmd_unit :: Maybe Unit
+    , pmd_value :: Double
+    } deriving (Show)
 
 enumerateMetrics :: [MetricDatum] -> Query
 enumerateMetrics = enumerateLists "MetricData.member." . fmap unroll
@@ -62,9 +57,16 @@ enumerateMetrics = enumerateLists "MetricData.member." . fmap unroll
 
 instance SignQuery PutMetricData where
     type ServiceConfiguration PutMetricData = QueryAPIConfiguration
-    signQuery (PutMetricData namespace xs) = cwSignQuery $ [ ("Action", qArg "PutMetricData")
-                                                           , ("Version", qArg "2010-08-01")
-                                                           , ("Namespace", qArg namespace)
-                                                           ] +++ enumerateMetrics xs
+    signQuery PutMetricData{..} = cwSignQuery $
+        [ ("Action", qArg "PutMetricData")
+        , ("Version", qArg "2010-08-01")
+        , ("Namespace", qArg pmd_namespace)
+        ] +++ enumerateMetrics [metric]
+            where metric = MetricDatum { md_dimensions = pmd_dimensions
+                                       , md_metricName = pmd_metricName
+                                       , md_timestamp = Nothing
+                                       , md_unit = pmd_unit
+                                       , md_value = MetricValue pmd_value
+                                       }
 
 QUERYVALUETRANSACTION(PutMetricData,"PutMetricDataResponse")
