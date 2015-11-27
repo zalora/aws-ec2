@@ -5,4 +5,3 @@
 
 Extension to [aws](https://github.com/aristidb/aws) library with focus on infrastructure services like EC2 and ELB.
 
-Stay tuned for updates.

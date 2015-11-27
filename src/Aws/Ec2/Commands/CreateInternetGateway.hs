@@ -15,7 +15,7 @@ data CreateInternetGateway = CreateInternetGateway
 
 instance SignQuery CreateInternetGateway where
     type ServiceConfiguration CreateInternetGateway = EC2Configuration
-    signQuery CreateInternetGateway{..} = ec2SignQuery $ 
+    signQuery CreateInternetGateway = ec2SignQuery $
                                            [ ("Action", qArg "CreateInternetGateway")
                                            , defVersion
                                            ]
