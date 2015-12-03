@@ -40,6 +40,9 @@ module Aws.Ec2 (
 , module Aws.Ec2.Commands.DescribeVolumeStatus
 , module Aws.Ec2.Commands.CreateVolume
 , module Aws.Ec2.Commands.AttachVolume
+
+, module Aws.Ec2.Commands.DescribePlacementGroups
+, module Aws.Ec2.Commands.CreatePlacementGroup
 ) where
 
 import Aws.Core (Transaction)
@@ -83,3 +86,6 @@ import Aws.Ec2.Commands.DescribeVolumes
 import Aws.Ec2.Commands.DescribeVolumeStatus
 import Aws.Ec2.Commands.CreateVolume
 import Aws.Ec2.Commands.AttachVolume
+
+import Aws.Ec2.Commands.DescribePlacementGroups
+import Aws.Ec2.Commands.CreatePlacementGroup
