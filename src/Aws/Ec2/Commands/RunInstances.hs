@@ -39,7 +39,7 @@ data RunInstances = RunInstances
                   , run_iamInstanceProfileARN :: Maybe Text
                   , run_availabilityZone :: Maybe Text
                   , run_associatePublicIpAddress :: Bool
-                  -- , run_placement :: Maybe Placement
+                  , run_placementGroup :: Maybe Text
                   -- also missing: NetworkInterface
                   } deriving (Show)
 
@@ -55,7 +55,7 @@ enumerateBlockDevices = enumerateLists "BlockDeviceMapping." . fmap unroll
     unroll BlockDeviceMapping{..} = [ ("DeviceName", qArg bdm_deviceName)
                                     ] +++ case bdm_device of
                                             Ephemeral{..} -> [("VirtualName", qArg bdm_virtualName)]
-                                            EBS ebs -> queryEbsBlockDevice ebs                                            
+                                            EBS ebs -> queryEbsBlockDevice ebs
 
 instance SignQuery RunInstances where
     type ServiceConfiguration RunInstances = EC2Configuration
@@ -67,6 +67,7 @@ instance SignQuery RunInstances where
                                   +++ (optionalA "RamdiskId" run_ramdiskId)
                                   +++ (optionalA "ClientToken" run_clientToken)
                                   +++ (optionalA "Placement.AvailabilityZone" run_availabilityZone)
+                                  +++ (optionalA "Placement.GroupName" run_placementGroup)
                                   +++ enumerateBlockDevices run_blockDeviceMappings
         where
           main :: HTTP.Query
@@ -89,4 +90,3 @@ instance SignQuery RunInstances where
                                           ] +++ enumerate "NetworkInterface.0.SecurityGroupId" run_securityGroupIds qArg
 
 EC2VALUETRANSACTION(RunInstances,"RunInstancesResponse")
-

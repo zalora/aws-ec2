@@ -55,6 +55,7 @@ runInst region imageid instType subnetId publicIp useMetadata = do
         Nothing
         Nothing
         publicIp
+        Nothing
     B.putStr $ Y.encode val
     return ()
 
