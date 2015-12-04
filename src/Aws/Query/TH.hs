@@ -41,7 +41,7 @@ queryValueTransactionDef ty cons tag signF version item filterKey = do
 
                   instance ResponseConsumer $(conT ty) Value where
                       type ResponseMetadata Value = QueryMetadata
-                      responseConsumer _ = queryResponseConsumer $ valueConsumerOpt (XMLValueOptions $(stringE item)) $(stringE tag) id
+                      responseConsumer _ = queryResponseConsumer $ valueConsumerOpt (XMLValueOptions $(stringE item)) $(stringE tag) fromJSONConsumer
 
                   instance Transaction $(conT ty) Value
                   |]
@@ -50,7 +50,7 @@ queryValueTransaction :: Name -> String -> DecsQ
 queryValueTransaction ty tag = [d|
                   instance ResponseConsumer $(conT ty) Value where
                       type ResponseMetadata Value = QueryMetadata
-                      responseConsumer _ = queryResponseConsumer $ valueConsumer $(stringE tag) id
+                      responseConsumer _ = queryResponseConsumer $ valueConsumer $(stringE tag) fromJSONConsumer
 
                   instance Transaction $(conT ty) Value
                   |]

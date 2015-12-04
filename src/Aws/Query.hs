@@ -19,6 +19,7 @@ module Aws.Query (
 , qArg
 , qShow
 , qBool
+, fromJSONConsumer
 , valueConsumer
 , valueConsumerOpt
 , queryResponseConsumer
@@ -44,6 +45,7 @@ import qualified Data.Text as T
 import Data.Text (Text)
 import Data.Text.Encoding (encodeUtf8)
 
+import Data.Aeson (FromJSON, Result (..), fromJSON)
 import Data.List
 import Data.Monoid
 import Data.Maybe
@@ -94,6 +96,13 @@ instance Loggable QueryMetadata where
 instance Monoid QueryMetadata where
     mempty = QueryMetadata Nothing
     (QueryMetadata r1) `mappend` (QueryMetadata r2) = QueryMetadata (r1 `mplus` r2)
+
+data ConsumeError = ConsumeError String deriving (Typeable)
+
+instance C.Exception ConsumeError
+
+instance Show ConsumeError where
+  show (ConsumeError e) = e
 
 querySignQuery :: HTTP.Query -> QueryData -> SignatureData -> SignedQuery
 querySignQuery query QueryData{..} sd
@@ -201,14 +210,23 @@ qBool :: Bool -> Maybe B.ByteString
 qBool True = Just "true"
 qBool False = Just "false"
 
-valueConsumer :: Text -> (Value -> a) -> Cu.Cursor -> Response QueryMetadata a
+fromJSONConsumer :: FromJSON a => Value -> Response QueryMetadata a
+fromJSONConsumer value =
+  case fromJSON value of
+      Error e -> throwM $
+        ConsumeError $ "ConsumeError: " ++ e ++
+                       "\nError occured while consuming the following Value:\n" ++
+                       show value
+      Success result -> return result
+
+valueConsumer :: Text -> (Value -> Response QueryMetadata a) -> Cu.Cursor -> Response QueryMetadata a
 valueConsumer = valueConsumerOpt (XMLValueOptions "item")
 
-valueConsumerOpt :: XMLValueOptions -> Text -> (Value -> a) -> Cu.Cursor -> Response QueryMetadata a
+valueConsumerOpt :: XMLValueOptions -> Text -> (Value -> Response QueryMetadata a) -> Cu.Cursor -> Response QueryMetadata a
 valueConsumerOpt options tag cons cu = go $ head cu'
   where
     cu' = cu $.// Cu.laxElement tag
-    go = return . cons . toValue options . Cu.node 
+    go = cons . toValue options . Cu.node
 
 -- similar: iamResponseConsumer
 queryResponseConsumer :: (Cu.Cursor -> Response QueryMetadata a)

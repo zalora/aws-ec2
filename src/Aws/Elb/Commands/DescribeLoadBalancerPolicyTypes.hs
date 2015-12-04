@@ -31,6 +31,6 @@ instance ResponseConsumer DescribeLoadBalancerPolicyTypes Value where
     responseConsumer ListLoadBalancerPolicyTypes = queryResponseConsumer $ \cu -> do
       let cu' = cu $.// Cu.laxElement "PolicyTypeName" &| (toValue (XMLValueOptions "item") . Cu.node)
       return $ Array $ V.fromList cu'
-    responseConsumer (DescribeLoadBalancerPolicyTypes _) = queryResponseConsumer $ valueConsumerOpt (XMLValueOptions "member") "DescribeLoadBalancerPolicyTypesResult" id
+    responseConsumer (DescribeLoadBalancerPolicyTypes _) = queryResponseConsumer $ valueConsumerOpt (XMLValueOptions "member") "DescribeLoadBalancerPolicyTypesResult" fromJSONConsumer
 
 instance Transaction DescribeLoadBalancerPolicyTypes Value

@@ -31,7 +31,7 @@ elbValueTransaction :: Name -> String -> DecsQ
 elbValueTransaction ty tag = [d|
                   instance ResponseConsumer $(conT ty) Value where
                       type ResponseMetadata Value = QueryMetadata
-                      responseConsumer _ = queryResponseConsumer $ valueConsumerOpt (XMLValueOptions "member") $(stringE tag) id
+                      responseConsumer _ = queryResponseConsumer $ valueConsumerOpt (XMLValueOptions "member") $(stringE tag) fromJSONConsumer
 
                   instance Transaction $(conT ty) Value
                   |]
