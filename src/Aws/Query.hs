@@ -19,6 +19,7 @@ module Aws.Query (
 , qArg
 , qShow
 , qBool
+, fromJSONConsumer
 , valueConsumer
 , valueConsumerOpt
 , queryResponseConsumer
@@ -32,6 +33,7 @@ module Aws.Query (
 import qualified Control.Exception as C
 import Control.Monad.Trans.Resource (throwM)
 import Control.Monad (mplus)
+import Control.Monad.Catch (Exception, MonadThrow)
 
 import qualified Blaze.ByteString.Builder as Blaze
 import qualified Blaze.ByteString.Builder.Char8 as Blaze8
@@ -44,6 +46,7 @@ import qualified Data.Text as T
 import Data.Text (Text)
 import Data.Text.Encoding (encodeUtf8)
 
+import Data.Aeson (FromJSON, Result (..), fromJSON)
 import Data.List
 import Data.Monoid
 import Data.Maybe
@@ -201,14 +204,26 @@ qBool :: Bool -> Maybe B.ByteString
 qBool True = Just "true"
 qBool False = Just "false"
 
-valueConsumer :: Text -> (Value -> a) -> Cu.Cursor -> Response QueryMetadata a
+data ConsumeException = ConsumeException String
+instance Exception ConsumeException
+instance Show ConsumeException where
+  show (ConsumeException e) = e
+
+fromJSONConsumer :: FromJSON a => Value -> Response QueryMetadata a
+fromJSONConsumer value =
+  case fromJSON value of
+      Error e -> throwM $
+        ConsumeException $ "Error consuming Value: " ++ e
+      Success result -> return result
+
+valueConsumer :: Text -> (Value -> Response QueryMetadata a) -> Cu.Cursor -> Response QueryMetadata a
 valueConsumer = valueConsumerOpt (XMLValueOptions "item")
 
-valueConsumerOpt :: XMLValueOptions -> Text -> (Value -> a) -> Cu.Cursor -> Response QueryMetadata a
+valueConsumerOpt :: XMLValueOptions -> Text -> (Value -> Response QueryMetadata a) -> Cu.Cursor -> Response QueryMetadata a
 valueConsumerOpt options tag cons cu = go $ head cu'
   where
     cu' = cu $.// Cu.laxElement tag
-    go = return . cons . toValue options . Cu.node 
+    go = cons . toValue options . Cu.node
 
 -- similar: iamResponseConsumer
 queryResponseConsumer :: (Cu.Cursor -> Response QueryMetadata a)

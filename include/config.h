@@ -6,9 +6,9 @@
 
 #ifdef USE_TH
 #define QUERYVALUETRANSACTION(Name,Response) queryValueTransaction ''Name Response
-#define EC2VALUETRANSACTIONDEF(Name,NameStr,Tag,FilterKey) ec2ValueTransactionDef ''Name 'Name Tag FilterKey 
+#define EC2VALUETRANSACTIONDEF(Name,NameStr,Tag,FilterKey) ec2ValueTransactionDef ''Name 'Name Tag FilterKey
 #define EC2VALUETRANSACTION(Name,Response) ec2ValueTransaction ''Name Response
-#define ELBVALUETRANSACTIONDEF(Name,NameStr,Tag,FilterKey) elbValueTransactionDef ''Name 'Name Tag FilterKey 
+#define ELBVALUETRANSACTIONDEF(Name,NameStr,Tag,FilterKey) elbValueTransactionDef ''Name 'Name Tag FilterKey
 #define ELBVALUETRANSACTION(Name,Response) elbValueTransaction ''Name Response
 
 #else
@@ -17,7 +17,7 @@ instance ResponseConsumer Name Value where { \
   type ResponseMetadata Value = QueryMetadata; \
   responseConsumer _v \
     = (queryResponseConsumer \
-       $ (valueConsumer Response id)) }; \
+       $ (valueConsumer Response fromJSONConsumer)) }; \
 instance Transaction Name Value
 
 #define EC2VALUETRANSACTIONDEF(Name,NameStr,Tag,FilterKey) \
@@ -32,7 +32,7 @@ instance ResponseConsumer Name Value where { \
   responseConsumer _v \
     = (queryResponseConsumer \
        $ (valueConsumerOpt \
-            (XMLValueOptions "item") Tag id)) } ;\
+            (XMLValueOptions "item") Tag fromJSONConsumer)) } ;\
 instance Transaction Name Value
 
 #define EC2VALUETRANSACTION(Name,Response) \
@@ -40,7 +40,7 @@ instance ResponseConsumer Name Value where { \
   type ResponseMetadata Value = QueryMetadata ; \
   responseConsumer _v \
     = (queryResponseConsumer \
-       $ (valueConsumer (Response) id)) } ; \
+       $ (valueConsumer (Response) fromJSONConsumer)) } ; \
 instance Transaction Name Value
 
 #define ELBVALUETRANSACTIONDEF(Name,NameStr,Tag,FilterKey) \
@@ -55,7 +55,7 @@ instance ResponseConsumer Name Value where { \
   responseConsumer _ \
     = (queryResponseConsumer \
        $ (valueConsumerOpt \
-            (XMLValueOptions "member") Tag id)) }; \
+            (XMLValueOptions "member") Tag fromJSONConsumer)) }; \
 instance Transaction Name Value
 
 #define ELBVALUETRANSACTION(Name,Response) \
@@ -64,7 +64,7 @@ instance ResponseConsumer Name Value where { \
   responseConsumer _v \
     = (queryResponseConsumer \
        $ (valueConsumerOpt \
-            (XMLValueOptions "member") Response id)) }; \
+            (XMLValueOptions "member") Response fromJSONConsumer)) }; \
 instance Transaction Name Value
 
 #endif
