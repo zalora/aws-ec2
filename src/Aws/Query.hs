@@ -33,7 +33,6 @@ module Aws.Query (
 import qualified Control.Exception as C
 import Control.Monad.Trans.Resource (throwM)
 import Control.Monad (mplus)
-import Control.Monad.Catch (Exception, MonadThrow)
 
 import qualified Blaze.ByteString.Builder as Blaze
 import qualified Blaze.ByteString.Builder.Char8 as Blaze8
@@ -97,6 +96,10 @@ instance Loggable QueryMetadata where
 instance Monoid QueryMetadata where
     mempty = QueryMetadata Nothing
     (QueryMetadata r1) `mappend` (QueryMetadata r2) = QueryMetadata (r1 `mplus` r2)
+
+data ConsumerError = ConsumerError String deriving (Show, Typeable)
+
+instance C.Exception ConsumerError
 
 querySignQuery :: HTTP.Query -> QueryData -> SignatureData -> SignedQuery
 querySignQuery query QueryData{..} sd
@@ -204,16 +207,11 @@ qBool :: Bool -> Maybe B.ByteString
 qBool True = Just "true"
 qBool False = Just "false"
 
-data ConsumeException = ConsumeException String
-instance Exception ConsumeException
-instance Show ConsumeException where
-  show (ConsumeException e) = e
-
 fromJSONConsumer :: FromJSON a => Value -> Response QueryMetadata a
 fromJSONConsumer value =
   case fromJSON value of
       Error e -> throwM $
-        ConsumeException $ "Error consuming Value: " ++ e
+        ConsumerError $ "Error consuming Value: " ++ e
       Success result -> return result
 
 valueConsumer :: Text -> (Value -> Response QueryMetadata a) -> Cu.Cursor -> Response QueryMetadata a
