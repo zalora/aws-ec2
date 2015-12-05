@@ -13,7 +13,6 @@ module Aws.Query.TH (
 , module Aws.Query
 , Text
 , UTCTime
-, FromJSON
 #ifdef USE_TH
 , queryValueTransactionDef
 , queryValueTransaction
@@ -25,7 +24,6 @@ import Language.Haskell.TH.Lib
 import Language.Haskell.TH.Syntax
 
 import Data.Text (Text)
-import Data.Aeson.Types (FromJSON(..))
 import Data.Time.Clock (UTCTime)
 
 import Aws.Core

@@ -97,9 +97,12 @@ instance Monoid QueryMetadata where
     mempty = QueryMetadata Nothing
     (QueryMetadata r1) `mappend` (QueryMetadata r2) = QueryMetadata (r1 `mplus` r2)
 
-data ConsumerError = ConsumerError String deriving (Show, Typeable)
+data ConsumeError = ConsumeError String deriving (Typeable)
 
-instance C.Exception ConsumerError
+instance C.Exception ConsumeError
+
+instance Show ConsumeError where
+  show (ConsumeError e) = e
 
 querySignQuery :: HTTP.Query -> QueryData -> SignatureData -> SignedQuery
 querySignQuery query QueryData{..} sd
@@ -211,7 +214,9 @@ fromJSONConsumer :: FromJSON a => Value -> Response QueryMetadata a
 fromJSONConsumer value =
   case fromJSON value of
       Error e -> throwM $
-        ConsumerError $ "Error consuming Value: " ++ e
+        ConsumeError $ "ConsumeError: " ++ e ++
+                       "\nError occured while consuming the following Value:\n" ++
+                       show value
       Success result -> return result
 
 valueConsumer :: Text -> (Value -> Response QueryMetadata a) -> Cu.Cursor -> Response QueryMetadata a
