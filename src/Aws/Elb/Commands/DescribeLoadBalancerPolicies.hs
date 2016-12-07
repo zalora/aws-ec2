@@ -4,7 +4,6 @@
            , OverloadedStrings
            , TemplateHaskell
            , RecordWildCards
-           , CPP
            #-}
 
 module Aws.Elb.Commands.DescribeLoadBalancerPolicies where
@@ -20,4 +19,4 @@ instance SignQuery DescribeLoadBalancerPolicies where
                                                                  , ("LoadBalancerName", qArg lb)
                                                                  ]
 
-ELBVALUETRANSACTION(DescribeLoadBalancerPolicies,"DescribeLoadBalancerPoliciesResult")
+elbValueTransaction ''DescribeLoadBalancerPolicies "DescribeLoadBalancerPoliciesResult"

@@ -4,7 +4,6 @@
            , OverloadedStrings
            , TemplateHaskell
            , RecordWildCards
-           , CPP
            #-}
 
 module Aws.Elb.Commands.DescribeInstanceHealth where
@@ -20,4 +19,4 @@ instance SignQuery DescribeInstanceHealth where
                                                            , ("LoadBalancerName", qArg lb)
                                                            ]
 
-ELBVALUETRANSACTION(DescribeInstanceHealth,"DescribeInstanceHealthResult")
+elbValueTransaction ''DescribeInstanceHealth "DescribeInstanceHealthResult"

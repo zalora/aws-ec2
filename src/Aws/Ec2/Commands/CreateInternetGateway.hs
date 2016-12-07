@@ -4,7 +4,6 @@
            , OverloadedStrings
            , RecordWildCards
            , TemplateHaskell
-           , CPP
            #-}
 
 module Aws.Ec2.Commands.CreateInternetGateway where
@@ -21,4 +20,4 @@ instance SignQuery CreateInternetGateway where
                                            , defVersion
                                            ]
 
-EC2VALUETRANSACTION(CreateInternetGateway,"internetGateway")
+ec2ValueTransaction ''CreateInternetGateway "internetGateway"

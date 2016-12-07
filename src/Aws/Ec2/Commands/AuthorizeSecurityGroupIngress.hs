@@ -4,7 +4,6 @@
            , OverloadedStrings
            , RecordWildCards
            , TemplateHaskell
-           , CPP
            #-}
 
 module Aws.Ec2.Commands.AuthorizeSecurityGroupIngress where
@@ -51,4 +50,4 @@ instance SignQuery AuthorizeSecurityGroupIngress where
                                            , defVersion
                                            ] +++ enumeratePermissions asi_permissions
 
-EC2VALUETRANSACTION(AuthorizeSecurityGroupIngress,"AuthorizeSecurityGroupIngressResponse")
+ec2ValueTransaction ''AuthorizeSecurityGroupIngress "AuthorizeSecurityGroupIngressResponse"

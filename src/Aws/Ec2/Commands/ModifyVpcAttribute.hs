@@ -4,7 +4,6 @@
            , OverloadedStrings
            , RecordWildCards
            , TemplateHaskell
-           , CPP
            #-}
 
 module Aws.Ec2.Commands.ModifyVpcAttribute where
@@ -29,4 +28,4 @@ instance SignQuery ModifyVpcAttribute where
                                                    EnableDnsSupport es -> [("EnableDnsSupport.Value", qShow es)]
                                                    EnableDnsHostnames eh -> [("EnableDnsHostnames.Value", qShow eh)]
 
-EC2VALUETRANSACTION(ModifyVpcAttribute,"return")
+ec2ValueTransaction ''ModifyVpcAttribute "return"

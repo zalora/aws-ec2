@@ -3,7 +3,6 @@
            , FlexibleInstances
            , OverloadedStrings
            , TemplateHaskell
-           , CPP
            #-}
 
 module Aws.Ec2.TH (
@@ -14,10 +13,8 @@ module Aws.Ec2.TH (
 , Text
 , UTCTime
 , FromJSON
-#ifdef USE_TH
 , ec2ValueTransactionDef
 , ec2ValueTransaction
-#endif
 ) where
 
 import Data.Text (Text)
@@ -30,8 +27,6 @@ import Aws.Ec2.Types
 import Aws.Query
 import Aws.Query.TH
 
-#ifdef USE_TH
 ec2ValueTransactionDef ty cons tag filterKey = queryValueTransactionDef ty cons tag 'ec2SignQuery 'defVersion "item" filterKey
 
 ec2ValueTransaction = queryValueTransaction
-#endif

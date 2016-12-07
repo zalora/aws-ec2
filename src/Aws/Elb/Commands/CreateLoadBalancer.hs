@@ -4,7 +4,6 @@
            , OverloadedStrings
            , TemplateHaskell
            , RecordWildCards
-           , CPP
            #-}
 
 module Aws.Elb.Commands.CreateLoadBalancer where
@@ -56,5 +55,4 @@ instance SignQuery CreateLoadBalancer where
                                                             Internal -> [("Scheme", qArg "internal")]
                                                             _ -> []
 
-
-ELBVALUETRANSACTION(CreateLoadBalancer,"CreateLoadBalancerResult")
+elbValueTransaction ''CreateLoadBalancer "CreateLoadBalancerResult"

@@ -4,7 +4,6 @@
            , OverloadedStrings
            , TemplateHaskell
            , RecordWildCards
-           , CPP
            #-}
 
 module Aws.Elb.Commands.ConfigureHealthCheck where
@@ -47,4 +46,4 @@ instance SignQuery ConfigureHealthCheck where
                                                     , ("HealthCheck.Timeout", qShow hc_timeout)
                                                     ]
 
-ELBVALUETRANSACTION(ConfigureHealthCheck,"ConfigureHealthCheckResult")
+elbValueTransaction ''ConfigureHealthCheck "ConfigureHealthCheckResult"

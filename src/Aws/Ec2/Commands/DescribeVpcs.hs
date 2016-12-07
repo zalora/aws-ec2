@@ -1,7 +1,6 @@
 {-# LANGUAGE TypeFamilies
            , MultiParamTypeClasses
            , TemplateHaskell
-           , CPP
            , OverloadedStrings
            #-}
 
@@ -12,4 +11,4 @@ import Aws.Ec2.TH
 data DescribeVpcs = DescribeVpcs { dvpc_vpcIds :: [Text] }
                        deriving (Show)
 
-EC2VALUETRANSACTIONDEF(DescribeVpcs,"DescribeVpcs","vpcSet","VpcId")
+ec2ValueTransactionDef ''DescribeVpcs 'DescribeVpcs "vpcSet" "VpcId"

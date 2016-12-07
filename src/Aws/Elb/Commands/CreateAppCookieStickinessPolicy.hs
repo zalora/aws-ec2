@@ -4,7 +4,6 @@
            , OverloadedStrings
            , TemplateHaskell
            , RecordWildCards
-           , CPP
            #-}
 
 module Aws.Elb.Commands.CreateAppCookieStickinessPolicy where
@@ -27,4 +26,4 @@ instance SignQuery CreateAppCookieStickinessPolicy where
                                                     , ("CookieName", qArg cacsp_cookieName)
                                                     ]
 
-ELBVALUETRANSACTION(CreateAppCookieStickinessPolicy,"CreateAppCookieStickinessPolicyResult")
+elbValueTransaction ''CreateAppCookieStickinessPolicy "CreateAppCookieStickinessPolicyResult"

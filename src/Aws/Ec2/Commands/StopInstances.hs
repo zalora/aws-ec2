@@ -5,7 +5,6 @@
            , RecordWildCards
            , TemplateHaskell
            , LambdaCase
-           , CPP
            #-}
 
 module Aws.Ec2.Commands.StopInstances where
@@ -36,4 +35,4 @@ instance SignQuery StopInstances where
           enumerateInstances ((i,x):xs) = [("InstanceId." <> pack (show i), qArg x)] +++ enumerateInstances xs
 
 
-EC2VALUETRANSACTION(StopInstances,"StopInstancesResponse")
+ec2ValueTransaction ''StopInstances "StopInstancesResponse"

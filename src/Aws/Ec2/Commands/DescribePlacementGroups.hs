@@ -1,7 +1,6 @@
 {-# LANGUAGE TemplateHaskell
            , MultiParamTypeClasses
            , TypeFamilies
-           , CPP
            , OverloadedStrings
            #-}
 
@@ -12,4 +11,4 @@ import Aws.Ec2.TH
 data DescribePlacementGroups = DescribePlacementGroups [Text]
                        deriving (Show)
 
-EC2VALUETRANSACTIONDEF(DescribePlacementGroups,"DescribePlacementGroups","placementGroupSet","GroupName")
+ec2ValueTransactionDef ''DescribePlacementGroups 'DescribePlacementGroups "placementGroupSet" "GroupName"

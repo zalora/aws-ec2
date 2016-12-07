@@ -3,7 +3,6 @@
            , TemplateHaskell
            , RecordWildCards
            , OverloadedStrings
-           , CPP
            #-}
 
 -- | Optimized to lookup a default route table for VPC.
@@ -37,4 +36,4 @@ instance SignQuery CreateRoute where
                                                    NetworkInterfaceId t -> [("NetworkInterfaceId", qArg t)]
                                                    VpcPeeringConnectionId t -> [("VpcPeeringConnectionId", qArg t)]
 
-EC2VALUETRANSACTION(CreateRoute,"return")
+ec2ValueTransaction ''CreateRoute "return"

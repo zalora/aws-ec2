@@ -4,7 +4,6 @@
            , OverloadedStrings
            , RecordWildCards
            , TemplateHaskell
-           , CPP
            #-}
 
 module Aws.Ec2.Commands.CreateVolume where
@@ -25,4 +24,4 @@ instance SignQuery CreateVolume where
                                                 , ("AvailabilityZone", qArg cvol_AvailabilityZone)
                                                 ] ++ queryEbsBlockDevice cvol_ebs
 
-EC2VALUETRANSACTION(CreateVolume,"CreateVolumeResponse")
+ec2ValueTransaction ''CreateVolume "CreateVolumeResponse"

@@ -5,7 +5,6 @@
            , RecordWildCards
            , TemplateHaskell
            , OverloadedStrings
-           , CPP
            #-}
 
 module Aws.CloudWatch.Commands.PutMetricData where
@@ -69,4 +68,4 @@ instance SignQuery PutMetricData where
                                                            , ("Namespace", qArg namespace)
                                                            ] +++ enumerateMetrics xs
 
-QUERYVALUETRANSACTION(PutMetricData,"PutMetricDataResponse")
+queryValueTransaction ''PutMetricData "PutMetricDataResponse"

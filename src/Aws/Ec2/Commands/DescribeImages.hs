@@ -3,7 +3,6 @@
            , TypeFamilies
            , RecordWildCards
            , OverloadedStrings
-           , CPP
            #-}
 
 module Aws.Ec2.Commands.DescribeImages where
@@ -22,4 +21,4 @@ instance SignQuery DescribeImages where
                                                         [] -> [("Owner.1", qArg "self")]
                                                         _ -> enumerate "ImageId" di_imageIds qArg
 
-EC2VALUETRANSACTION(DescribeImages,"imagesSet")
+ec2ValueTransaction ''DescribeImages "imagesSet"

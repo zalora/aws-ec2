@@ -4,7 +4,6 @@
            , OverloadedStrings
            , TemplateHaskell
            , RecordWildCards
-           , CPP
            #-}
 
 module Aws.Elb.Commands.RegisterInstancesWithLoadBalancer where
@@ -26,4 +25,4 @@ instance SignQuery RegisterInstancesWithLoadBalancer where
                                                     , ("LoadBalancerName", qArg rilb_name)
                                                     ] +++ enumerateInstanceIds rilb_instanceIds
 
-ELBVALUETRANSACTION(RegisterInstancesWithLoadBalancer,"RegisterInstancesWithLoadBalancerResult")
+elbValueTransaction ''RegisterInstancesWithLoadBalancer "RegisterInstancesWithLoadBalancerResult"

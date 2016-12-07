@@ -4,7 +4,6 @@
            , OverloadedStrings
            , RecordWildCards
            , TemplateHaskell
-           , CPP
            #-}
 
 module Aws.Ec2.Commands.CreateVpc where
@@ -25,4 +24,4 @@ instance SignQuery CreateVpc where
                                            , defVersion
                                            ]
 
-EC2VALUETRANSACTION(CreateVpc,"vpc")
+ec2ValueTransaction ''CreateVpc "vpc"

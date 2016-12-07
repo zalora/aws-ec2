@@ -4,7 +4,6 @@
            , OverloadedStrings
            , RecordWildCards
            , TemplateHaskell
-           , CPP
            #-}
 
 module Aws.Ec2.Commands.CreatePlacementGroup where
@@ -26,4 +25,4 @@ instance SignQuery CreatePlacementGroup where
                                            , defVersion
                                            ]
 
-EC2VALUETRANSACTION(CreatePlacementGroup,"return")
+ec2ValueTransaction ''CreatePlacementGroup "return"

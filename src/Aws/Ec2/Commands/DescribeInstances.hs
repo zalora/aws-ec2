@@ -4,7 +4,6 @@
            , OverloadedStrings
            , TemplateHaskell
            , RecordWildCards
-           , CPP
            #-}
 
 module Aws.Ec2.Commands.DescribeInstances where
@@ -21,5 +20,4 @@ instance SignQuery DescribeInstances where
                                                 , defVersion
                                                 ] +++ enumerate "InstanceId" di_instanceIds qArg
 
-EC2VALUETRANSACTION(DescribeInstances,"reservationSet")
-
+ec2ValueTransaction ''DescribeInstances "reservationSet"

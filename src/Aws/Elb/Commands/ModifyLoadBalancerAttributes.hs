@@ -4,7 +4,6 @@
            , OverloadedStrings
            , TemplateHaskell
            , RecordWildCards
-           , CPP
            #-}
 
 module Aws.Elb.Commands.ModifyLoadBalancerAttributes where
@@ -54,4 +53,4 @@ instance SignQuery ModifyLoadBalancerAttributes where
                                                     , ("LoadBalancerName", qArg mlba_name)
                                                     ] +++ concatMap attributeQuery mlba_attributes
 
-ELBVALUETRANSACTION(ModifyLoadBalancerAttributes,"ModifyLoadBalancerAttributesResult")
+elbValueTransaction ''ModifyLoadBalancerAttributes "ModifyLoadBalancerAttributesResult"

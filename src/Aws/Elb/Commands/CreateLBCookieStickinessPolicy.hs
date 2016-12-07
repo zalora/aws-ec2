@@ -4,7 +4,6 @@
            , OverloadedStrings
            , TemplateHaskell
            , RecordWildCards
-           , CPP
            #-}
 
 module Aws.Elb.Commands.CreateLBCookieStickinessPolicy where
@@ -26,4 +25,4 @@ instance SignQuery CreateLBCookieStickinessPolicy where
                                                     , ("PolicyName", qArg clbcsp_policyName)
                                                     ] +++ optional "CookieExpirationPeriod" clbcsp_cookieExpirationPeriod qShow
 
-ELBVALUETRANSACTION(CreateLBCookieStickinessPolicy,"CreateLBCookieStickinessPolicyResult")
+elbValueTransaction ''CreateLBCookieStickinessPolicy "CreateLBCookieStickinessPolicyResult"

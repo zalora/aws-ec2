@@ -4,7 +4,6 @@
            , OverloadedStrings
            , TemplateHaskell
            , RecordWildCards
-           , CPP
            #-}
 
 module Aws.Elb.Commands.SetLoadBalancerPoliciesOfListener where
@@ -26,4 +25,4 @@ instance SignQuery SetLoadBalancerPoliciesOfListener where
                                                     , ("LoadBalancerPort", qShow spl_loadBalancerPort)
                                                     ] +++ enumerate "PolicyNames.member" spl_policyNames qArg
 
-ELBVALUETRANSACTION(SetLoadBalancerPoliciesOfListener,"SetLoadBalancerPoliciesOfListenerResult")
+elbValueTransaction ''SetLoadBalancerPoliciesOfListener "SetLoadBalancerPoliciesOfListenerResult"

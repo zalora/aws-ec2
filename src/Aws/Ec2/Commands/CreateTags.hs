@@ -4,7 +4,6 @@
            , OverloadedStrings
            , RecordWildCards
            , TemplateHaskell
-           , CPP
            #-}
 
 module Aws.Ec2.Commands.CreateTags where
@@ -34,4 +33,4 @@ instance SignQuery CreateTags where
                                            ] +++ enumerate "ResourceId" ct_resources qArg
                                              +++ enumerateTags ct_tags
 
-EC2VALUETRANSACTION(CreateTags,"return")
+ec2ValueTransaction ''CreateTags "return"
