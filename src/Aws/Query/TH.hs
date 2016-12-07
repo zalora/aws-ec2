@@ -3,6 +3,7 @@
            , FlexibleInstances
            , OverloadedStrings
            , TemplateHaskell
+           , CPP
            #-}
 
 -- boilerplate minimization for experimental stuff

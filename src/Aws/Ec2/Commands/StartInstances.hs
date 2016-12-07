@@ -5,6 +5,7 @@
            , RecordWildCards
            , TemplateHaskell
            , LambdaCase
+           , CPP
            #-}
 
 module Aws.Ec2.Commands.StartInstances where

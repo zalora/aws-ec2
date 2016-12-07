@@ -3,6 +3,8 @@
            , TypeFamilies
            , RecordWildCards
            , DeriveGeneric
+           , OverloadedStrings
+           , CPP
            #-}
 
 module Aws.Ec2.Commands.GetConsoleOutput where

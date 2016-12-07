@@ -1,6 +1,8 @@
 {-# LANGUAGE TemplateHaskell
            , MultiParamTypeClasses
            , TypeFamilies
+           , OverloadedStrings
+           , CPP
            #-}
 
 module Aws.Ec2.Commands.DescribeRegions where

@@ -1,6 +1,8 @@
 {-# LANGUAGE TemplateHaskell
            , MultiParamTypeClasses
            , TypeFamilies
+           , CPP
+           , OverloadedStrings
            #-}
 
 module Aws.Ec2.Commands.DescribeVolumes where

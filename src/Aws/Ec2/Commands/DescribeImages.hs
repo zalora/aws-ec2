@@ -2,6 +2,8 @@
            , MultiParamTypeClasses
            , TypeFamilies
            , RecordWildCards
+           , OverloadedStrings
+           , CPP
            #-}
 
 module Aws.Ec2.Commands.DescribeImages where

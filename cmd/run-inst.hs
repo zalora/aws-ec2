@@ -1,5 +1,4 @@
 {-# LANGUAGE FlexibleContexts, TypeFamilies  #-}
-{-# LANGUAGE OverlappingInstances  #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
 module Main where

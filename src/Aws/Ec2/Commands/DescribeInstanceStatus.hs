@@ -4,6 +4,8 @@
            , OverloadedStrings
            , TemplateHaskell
            , RecordWildCards
+           , OverloadedStrings
+           , CPP
            #-}
 
 module Aws.Ec2.Commands.DescribeInstanceStatus where

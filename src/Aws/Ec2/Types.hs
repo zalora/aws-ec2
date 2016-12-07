@@ -2,6 +2,7 @@
            , FlexibleInstances
            , RecordWildCards
            , LambdaCase
+           , OverloadedStrings
            #-}
 
 module Aws.Ec2.Types where

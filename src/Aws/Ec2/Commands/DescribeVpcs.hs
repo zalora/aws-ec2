@@ -1,6 +1,8 @@
 {-# LANGUAGE TypeFamilies
            , MultiParamTypeClasses
            , TemplateHaskell
+           , CPP
+           , OverloadedStrings
            #-}
 
 module Aws.Ec2.Commands.DescribeVpcs where

@@ -3,6 +3,7 @@
            , FlexibleInstances
            , OverloadedStrings
            , TemplateHaskell
+           , CPP
            #-}
 
 module Aws.Ec2.TH (

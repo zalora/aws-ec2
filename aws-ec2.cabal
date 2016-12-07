@@ -119,7 +119,6 @@ library
 
   hs-source-dirs:      src
   default-language:    Haskell2010
-  default-extensions:  OverloadedStrings, TemplateHaskell, CPP
   ghc-options:         -optP --include=include/config.h
 
 executable put-metric
@@ -134,7 +133,6 @@ executable put-metric
 
   hs-source-dirs:      cmd
   default-language:    Haskell2010
-  default-extensions:  OverloadedStrings
   ghc-options:         -static
 
 executable run-inst
@@ -154,5 +152,4 @@ executable run-inst
 
   hs-source-dirs:      cmd
   default-language:    Haskell2010
-  default-extensions:  OverloadedStrings
   ghc-options:         -static

@@ -4,6 +4,8 @@
            , OverloadedStrings
            , RecordWildCards
            , TemplateHaskell
+           , OverloadedStrings
+           , CPP
            #-}
 
 module Aws.CloudWatch.Commands.PutMetricData where

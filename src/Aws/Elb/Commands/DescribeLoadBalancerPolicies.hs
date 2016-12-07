@@ -4,6 +4,7 @@
            , OverloadedStrings
            , TemplateHaskell
            , RecordWildCards
+           , CPP
            #-}
 
 module Aws.Elb.Commands.DescribeLoadBalancerPolicies where

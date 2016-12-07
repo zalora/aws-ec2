@@ -4,6 +4,7 @@
            , OverloadedStrings
            , RecordWildCards
            , TemplateHaskell
+           , CPP
            #-}
 
 module Aws.Ec2.Commands.CreateSubnet where

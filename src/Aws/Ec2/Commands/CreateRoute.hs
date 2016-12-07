@@ -2,6 +2,8 @@
            , MultiParamTypeClasses
            , TemplateHaskell
            , RecordWildCards
+           , OverloadedStrings
+           , CPP
            #-}
 
 -- | Optimized to lookup a default route table for VPC.
