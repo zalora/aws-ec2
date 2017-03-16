@@ -7,9 +7,10 @@
 
 module Aws.Ec2.Types where
 
+import Data.Maybe (fromMaybe)
 import Data.Text (Text)
 import Data.Time.Clock (UTCTime)
-import Data.Monoid
+import Data.Monoid hiding (All)
 import Data.ByteString.Char8 (ByteString, pack)
 
 import Network.HTTP.Types as HTTP
@@ -98,3 +99,34 @@ instanceTypes = [ "t2.micro"
                 , "g2.2xlarge"
                 , "cg1.4xlarge"
                 ]
+
+data IpProtocol = TCP | UDP | ICMP | Proto Int | All
+
+instance Show IpProtocol where
+    show TCP = "tcp" -- 6
+    show UDP = "udp" -- 17
+    show ICMP = "icmp" -- 1
+    show (Proto i) = show i
+    show All = "-1"
+
+type CidrIp = Text
+type SgGroupId = Text
+
+data SgPermission = IpPermission IpProtocol (Maybe Int) (Maybe Int) [CidrIp]
+                  | SgPermission IpProtocol (Maybe Int) (Maybe Int) [SgGroupId]
+                deriving (Show)
+
+enumeratePermissions :: [SgPermission] -> HTTP.Query
+enumeratePermissions = enumerateLists "IpPermissions." . fmap unroll
+  where
+    port n = maybe [] (\p -> [(n, qShow p)])
+    unroll (IpPermission proto from to ips) =
+      [("IpProtocol", qShow proto)] ++
+      port "FromPort" from ++
+      port "ToPort" to +++
+      [(mconcat [k, ".CidrIp"], v)| (k, v) <- enumerate "IpRanges" ips qArg]
+    unroll (SgPermission proto from to sgs) =
+      [("IpProtocol", qShow proto)] ++
+      port "FromPort" from ++
+      port "ToPort" to +++
+      [(mconcat [k, ".GroupId"], v)| (k, v) <- enumerate "Groups" sgs qArg]
