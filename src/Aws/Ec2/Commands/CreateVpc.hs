@@ -24,4 +24,4 @@ instance SignQuery CreateVpc where
                                            , defVersion
                                            ]
 
-EC2VALUETRANSACTION(CreateVpc,"vpc")
+ec2ValueTransaction ''CreateVpc "vpc"

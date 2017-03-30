@@ -24,4 +24,4 @@ instance SignQuery CreateVolume where
                                                 , ("AvailabilityZone", qArg cvol_AvailabilityZone)
                                                 ] ++ queryEbsBlockDevice cvol_ebs
 
-EC2VALUETRANSACTION(CreateVolume,"CreateVolumeResponse")
+ec2ValueTransaction ''CreateVolume "CreateVolumeResponse"

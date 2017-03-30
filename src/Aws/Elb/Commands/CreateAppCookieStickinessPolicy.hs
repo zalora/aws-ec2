@@ -26,4 +26,4 @@ instance SignQuery CreateAppCookieStickinessPolicy where
                                                     , ("CookieName", qArg cacsp_cookieName)
                                                     ]
 
-ELBVALUETRANSACTION(CreateAppCookieStickinessPolicy,"CreateAppCookieStickinessPolicyResult")
+elbValueTransaction ''CreateAppCookieStickinessPolicy "CreateAppCookieStickinessPolicyResult"

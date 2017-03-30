@@ -2,6 +2,7 @@
            , FlexibleInstances
            , RecordWildCards
            , LambdaCase
+           , OverloadedStrings
            #-}
 
 module Aws.Elb.Types where

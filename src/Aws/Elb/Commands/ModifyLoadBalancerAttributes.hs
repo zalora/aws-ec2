@@ -53,4 +53,4 @@ instance SignQuery ModifyLoadBalancerAttributes where
                                                     , ("LoadBalancerName", qArg mlba_name)
                                                     ] +++ concatMap attributeQuery mlba_attributes
 
-ELBVALUETRANSACTION(ModifyLoadBalancerAttributes,"ModifyLoadBalancerAttributesResult")
+elbValueTransaction ''ModifyLoadBalancerAttributes "ModifyLoadBalancerAttributesResult"

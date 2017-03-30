@@ -35,4 +35,4 @@ instance SignQuery TerminateInstances where
           enumerateInstances ((i,x):xs) = [("InstanceId." <> pack (show i), qArg x)] +++ enumerateInstances xs
 
 
-EC2VALUETRANSACTION(TerminateInstances,"TerminateInstancesResponse")
+ec2ValueTransaction ''TerminateInstances "TerminateInstancesResponse"

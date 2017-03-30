@@ -14,10 +14,8 @@ module Aws.Query.TH (
 , Text
 , UTCTime
 , FromJSON
-#ifdef USE_TH
 , queryValueTransactionDef
 , queryValueTransaction
-#endif
 ) where
 
 import Language.Haskell.TH
@@ -31,7 +29,6 @@ import Data.Time.Clock (UTCTime)
 import Aws.Core
 import Aws.Query
 
-#ifdef USE_TH
 queryValueTransactionDef :: Name -> Name -> String -> Name -> Name -> String -> String -> DecsQ
 queryValueTransactionDef ty cons tag signF version item filterKey = do
                 arg <- newName "arg"
@@ -57,4 +54,3 @@ queryValueTransaction ty tag = [d|
 
                   instance Transaction $(conT ty) Value
                   |]
-#endif

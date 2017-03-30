@@ -2,6 +2,7 @@
            , MultiParamTypeClasses
            , TypeFamilies
            , RecordWildCards
+           , OverloadedStrings
            #-}
 
 module Aws.Ec2.Commands.DescribeSecurityGroups where
@@ -27,4 +28,4 @@ instance SignQuery DescribeSecurityGroups where
                                                         [] -> []
                                                         _ -> ("Filter.1.Name", qArg "group-name"):(enumerate "Filter.1.Value" sg_names qArg)
 
-EC2VALUETRANSACTION(DescribeSecurityGroups,"securityGroupInfo")
+ec2ValueTransaction ''DescribeSecurityGroups "securityGroupInfo"

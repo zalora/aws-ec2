@@ -89,4 +89,4 @@ instance SignQuery RunInstances where
                                           , ("NetworkInterface.0.AssociatePublicIpAddress", qShow run_associatePublicIpAddress)
                                           ] +++ enumerate "NetworkInterface.0.SecurityGroupId" run_securityGroupIds qArg
 
-EC2VALUETRANSACTION(RunInstances,"RunInstancesResponse")
+ec2ValueTransaction ''RunInstances "RunInstancesResponse"

@@ -1,4 +1,6 @@
-{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE TemplateHaskell
+           , CPP
+           #-}
 
 module Aws.TH where
 
@@ -8,7 +10,11 @@ import Language.Haskell.TH
 
 derivePatchedShowRead :: Name -> (String -> String) -> Q [Dec]
 derivePatchedShowRead name patch = do
+#if MIN_VERSION_template_haskell(2,11,0)
+    TyConI (DataD _ _ _ _ cons _) <- reify name
+#else
     TyConI (DataD _ _ _ cons _) <- reify name
+#endif
     let names = (\(NormalC name []) -> name) <$> cons
     Just show <- lookupValueName "show"
     showD <- instanceD (cxt []) (appT (conT ''Show) (conT name)) [fun show names]

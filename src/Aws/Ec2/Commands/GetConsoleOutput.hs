@@ -3,6 +3,7 @@
            , TypeFamilies
            , RecordWildCards
            , DeriveGeneric
+           , OverloadedStrings
            #-}
 
 module Aws.Ec2.Commands.GetConsoleOutput where
@@ -29,4 +30,4 @@ instance SignQuery GetConsoleOutput where
                                                   , ("InstanceId", qArg gco_instanceId)
                                                   ]
 
-EC2VALUETRANSACTION(GetConsoleOutput,"GetConsoleOutputResponse")
+ec2ValueTransaction ''GetConsoleOutput "GetConsoleOutputResponse"

@@ -55,5 +55,4 @@ instance SignQuery CreateLoadBalancer where
                                                             Internal -> [("Scheme", qArg "internal")]
                                                             _ -> []
 
-
-ELBVALUETRANSACTION(CreateLoadBalancer,"CreateLoadBalancerResult")
+elbValueTransaction ''CreateLoadBalancer "CreateLoadBalancerResult"
