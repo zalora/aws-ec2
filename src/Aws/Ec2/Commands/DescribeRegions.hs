@@ -12,3 +12,5 @@ data DescribeRegions = DescribeRegions [Text]
                        deriving (Show)
 
 ec2ValueTransactionDef ''DescribeRegions 'DescribeRegions "regionInfo" "RegionName"
+
+type DescribeRegionsResponse = [Region]
