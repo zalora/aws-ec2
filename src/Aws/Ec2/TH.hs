@@ -10,6 +10,7 @@ module Aws.Ec2.TH (
 , module Aws.Query
 , module Aws.Ec2.Core
 , module Aws.Ec2.Types
+, module Control.Applicative
 , Text
 , UTCTime
 , FromJSON
@@ -17,6 +18,7 @@ module Aws.Ec2.TH (
 , ec2ValueTransaction
 ) where
 
+import Control.Applicative hiding (optional)
 import Data.Text (Text)
 import Data.Aeson.Types (FromJSON(..))
 import Data.Time.Clock (UTCTime)

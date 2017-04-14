@@ -8,6 +8,8 @@
 
 module Aws.Ec2.Commands.GetConsoleOutput where
 
+import Data.Aeson (Value(..), FromJSON, (.:), parseJSON)
+
 import Aws.Ec2.TH
 import GHC.Generics
 
@@ -15,13 +17,18 @@ data GetConsoleOutput = GetConsoleOutput { gco_instanceId :: Text }
                        deriving (Show)
 
 data ConsoleOutput = ConsoleOutput
-                   { requestId :: Text
-                   , instanceId :: Text
-                   , timestamp :: UTCTime
-                   , output :: Text
+                   { coRequestId :: Text
+                   , coInstanceId :: Text
+                   , coTimestamp :: UTCTime
+                   , coOutput :: Text
                    } deriving (Generic, Show)
 
-instance FromJSON ConsoleOutput
+instance FromJSON ConsoleOutput where
+  parseJSON (Object v) = ConsoleOutput <$>
+    v .: "requestId" <*>
+    v .: "instanceId" <*>
+    v .: "timestamp" <*>
+    v .: "output"
 
 instance SignQuery GetConsoleOutput where
     type ServiceConfiguration GetConsoleOutput = EC2Configuration
