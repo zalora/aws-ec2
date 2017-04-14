@@ -4,6 +4,7 @@
            , OverloadedStrings
            , TemplateHaskell
            , RecordWildCards
+           , OverloadedStrings
            #-}
 
 module Aws.Elb.Commands.DescribeLoadBalancers where
@@ -12,4 +13,4 @@ import Aws.Elb.TH
 
 data DescribeLoadBalancers = DescribeLoadBalancers [Text]
 
-ELBVALUETRANSACTIONDEF(DescribeLoadBalancers,"DescribeLoadBalancers","LoadBalancerDescriptions","LoadBalancerNames.member")
+elbValueTransactionDef ''DescribeLoadBalancers 'DescribeLoadBalancers "LoadBalancerDescriptions" "LoadBalancerNames.member"

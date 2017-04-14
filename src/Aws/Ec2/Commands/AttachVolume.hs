@@ -27,4 +27,4 @@ instance SignQuery AttachVolume where
                                               , ("Device", qArg avol_device)
                                               ]
 
-EC2VALUETRANSACTION(AttachVolume,"AttachVolumeResponse")
+ec2ValueTransaction ''AttachVolume "AttachVolumeResponse"

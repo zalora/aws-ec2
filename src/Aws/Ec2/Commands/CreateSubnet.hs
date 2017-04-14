@@ -26,4 +26,4 @@ instance SignQuery CreateSubnet where
                                               , ("CidrBlock", qArg csub_cidrBlock)
                                               ] +++ (optionalA "AvailabilityZone" csub_availabilityZone)
 
-EC2VALUETRANSACTION(CreateSubnet,"subnet")
+ec2ValueTransaction ''CreateSubnet "subnet"

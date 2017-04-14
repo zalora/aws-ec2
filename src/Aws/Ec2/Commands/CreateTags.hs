@@ -8,22 +8,22 @@
 
 module Aws.Ec2.Commands.CreateTags where
 
+import Data.Aeson (Value (..), FromJSON, parseJSON)
+
 import Aws.Ec2.TH
 import qualified Network.HTTP.Types as HTTP
 
-type Tag = (Text, Text)
-
 data CreateTags = CreateTags
-               { ct_resources :: [Text]
-               , ct_tags :: [Tag]
-               } deriving (Show)
+                  { ct_resources :: [Text]
+                  , ct_tags :: [Tag]
+                  } deriving (Show)
 
 enumerateTags :: [Tag] -> HTTP.Query
 enumerateTags = enumerateLists "Tag." . fmap unroll
   where
-    unroll (key, value) = [ ("Key", qArg key)
-                          , ("Value", qArg value)
-                          ]
+    unroll (Tag key value) = [ ("Key", qArg key)
+                             , ("Value", qArg value)
+                             ]
 
 instance SignQuery CreateTags where
     type ServiceConfiguration CreateTags = EC2Configuration
@@ -33,4 +33,10 @@ instance SignQuery CreateTags where
                                            ] +++ enumerate "ResourceId" ct_resources qArg
                                              +++ enumerateTags ct_tags
 
-EC2VALUETRANSACTION(CreateTags,"return")
+ec2ValueTransaction ''CreateTags "return"
+
+newtype CreateTagsResponse = CreateTagsResponse {ctrReturn :: Bool} deriving (Show)
+
+instance FromJSON CreateTagsResponse where
+  parseJSON v = CreateTagsResponse <$>
+    (readBool <$> parseJSON v)

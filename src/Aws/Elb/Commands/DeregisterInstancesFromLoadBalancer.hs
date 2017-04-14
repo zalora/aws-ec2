@@ -25,4 +25,4 @@ instance SignQuery DeregisterInstancesFromLoadBalancer where
                                                     , ("LoadBalancerName", qArg dilb_name)
                                                     ] +++ enumerateInstanceIds dilb_instanceIds
 
-ELBVALUETRANSACTION(DeregisterInstancesFromLoadBalancer,"DeregisterInstancesFromLoadBalancerResult")
+elbValueTransaction ''DeregisterInstancesFromLoadBalancer "DeregisterInstancesFromLoadBalancerResult"

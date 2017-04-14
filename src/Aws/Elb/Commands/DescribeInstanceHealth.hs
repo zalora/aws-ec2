@@ -19,4 +19,4 @@ instance SignQuery DescribeInstanceHealth where
                                                            , ("LoadBalancerName", qArg lb)
                                                            ]
 
-ELBVALUETRANSACTION(DescribeInstanceHealth,"DescribeInstanceHealthResult")
+elbValueTransaction ''DescribeInstanceHealth "DescribeInstanceHealthResult"

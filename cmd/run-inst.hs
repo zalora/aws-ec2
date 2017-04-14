@@ -1,10 +1,10 @@
 {-# LANGUAGE FlexibleContexts, TypeFamilies  #-}
-{-# LANGUAGE OverlappingInstances  #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
 module Main where
 
 import Control.Monad
+import Data.Monoid
 import Options.Applicative
 
 import qualified Data.ByteString.Char8 as B

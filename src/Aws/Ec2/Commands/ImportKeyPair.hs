@@ -25,4 +25,4 @@ instance SignQuery ImportKeyPair where
                                            , ("PublicKeyMaterial", qArg ikp_publicKeyMaterial)
                                            ]
 
-EC2VALUETRANSACTION(ImportKeyPair,"ImportKeyPairResponse")
+ec2ValueTransaction ''ImportKeyPair "ImportKeyPairResponse"

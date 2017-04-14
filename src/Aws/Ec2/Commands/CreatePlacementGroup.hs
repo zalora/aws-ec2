@@ -25,4 +25,4 @@ instance SignQuery CreatePlacementGroup where
                                            , defVersion
                                            ]
 
-EC2VALUETRANSACTION(CreatePlacementGroup,"return")
+ec2ValueTransaction ''CreatePlacementGroup "return"
