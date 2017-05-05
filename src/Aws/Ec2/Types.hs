@@ -75,7 +75,7 @@ type SgGroupId = Text
 
 data SgPermission = IpPermission IpProtocol (Maybe Int) (Maybe Int) [CidrIp]
                   | SgPermission IpProtocol (Maybe Int) (Maybe Int) [SgGroupId]
-                deriving (Show)
+                deriving (Eq, Show)
 
 
 data Region = Region { regionEndpoint :: T.Text
@@ -423,6 +423,7 @@ instance Show VolumeType where
     show (IOPSSD _) = "io1"
 
 data IpProtocol = TCP | UDP | ICMP | Proto Int | All
+  deriving Eq
 
 instance Show IpProtocol where
     show TCP = "tcp" -- 6
