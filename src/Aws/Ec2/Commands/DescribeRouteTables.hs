@@ -2,6 +2,7 @@
            , MultiParamTypeClasses
            , TemplateHaskell
            , RecordWildCards
+           , OverloadedStrings
            #-}
 
 -- | Optimized to lookup a default route table for VPC.
@@ -22,4 +23,4 @@ instance SignQuery DescribeRouteTables where
                                            , ("Filter.1.Value.1", qArg drt_vpcId)
                                            ]
 
-EC2VALUETRANSACTION(DescribeRouteTables,"routeTableSet")
+ec2ValueTransaction ''DescribeRouteTables "routeTableSet"

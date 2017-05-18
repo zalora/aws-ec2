@@ -9,7 +9,9 @@
 
 module Aws.Ec2.Commands.TerminateInstances where
 
-import Data.Text ()
+import Data.Aeson (Value (..), FromJSON, (.:), parseJSON)
+import Data.Aeson.Types (typeMismatch)
+import Data.Text (Text)
 import Data.ByteString.Char8 (pack)
 import qualified Network.HTTP.Types as HTTP
 import Data.Monoid
@@ -35,4 +37,26 @@ instance SignQuery TerminateInstances where
           enumerateInstances ((i,x):xs) = [("InstanceId." <> pack (show i), qArg x)] +++ enumerateInstances xs
 
 
-EC2VALUETRANSACTION(TerminateInstances,"TerminateInstancesResponse")
+ec2ValueTransaction ''TerminateInstances "TerminateInstancesResponse"
+
+data TerminateInstancesResponse =
+  TerminateInstancesResponse { tirRequestId :: Text
+                             , tirInstancesSet :: [InstanceStateChange]}
+
+instance FromJSON TerminateInstancesResponse where
+  parseJSON (Object v) = TerminateInstancesResponse <$>
+    v .: "requestId" <*>
+    v .: "instancesSet"
+  parseJSON invalid = typeMismatch "TerminateInstancesResponse" invalid
+
+data InstanceStateChange =
+  InstanceStateChange { iscInstanceId    :: Text
+                      , iscCurrentState  :: InstanceState
+                      , iscPreviousState :: InstanceState}
+
+instance FromJSON InstanceStateChange where
+  parseJSON (Object v) = InstanceStateChange <$>
+    v .: "instanceId" <*>
+    v .: "currentState" <*>
+    v .: "previousState"
+  parseJSON invalid = typeMismatch "InstanceStateChange" invalid

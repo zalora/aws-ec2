@@ -11,6 +11,7 @@ module Aws.Ec2 (
 , module Aws.Ec2.Commands.DescribeSecurityGroups
 , module Aws.Ec2.Commands.CreateSecurityGroup
 , module Aws.Ec2.Commands.AuthorizeSecurityGroupIngress
+, module Aws.Ec2.Commands.RevokeSecurityGroupIngress
 
 , module Aws.Ec2.Commands.CreateTags
 , module Aws.Ec2.Commands.DescribeTags
@@ -24,6 +25,7 @@ module Aws.Ec2 (
 , module Aws.Ec2.Commands.StopInstances
 , module Aws.Ec2.Commands.TerminateInstances
 , module Aws.Ec2.Commands.GetConsoleOutput
+, module Aws.Ec2.Commands.ModifyInstanceAttribute
 
 , module Aws.Ec2.Commands.DescribeVpcs
 , module Aws.Ec2.Commands.CreateVpc
@@ -57,6 +59,7 @@ import Aws.Ec2.Commands.DescribeImages
 import Aws.Ec2.Commands.DescribeSecurityGroups
 import Aws.Ec2.Commands.CreateSecurityGroup
 import Aws.Ec2.Commands.AuthorizeSecurityGroupIngress
+import Aws.Ec2.Commands.RevokeSecurityGroupIngress
 
 import Aws.Ec2.Commands.CreateTags
 import Aws.Ec2.Commands.DescribeTags
@@ -70,6 +73,7 @@ import Aws.Ec2.Commands.StartInstances
 import Aws.Ec2.Commands.StopInstances
 import Aws.Ec2.Commands.TerminateInstances
 import Aws.Ec2.Commands.GetConsoleOutput
+import Aws.Ec2.Commands.ModifyInstanceAttribute
 
 import Aws.Ec2.Commands.DescribeVpcs
 import Aws.Ec2.Commands.CreateVpc

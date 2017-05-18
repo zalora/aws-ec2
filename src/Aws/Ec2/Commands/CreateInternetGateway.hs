@@ -20,4 +20,4 @@ instance SignQuery CreateInternetGateway where
                                            , defVersion
                                            ]
 
-EC2VALUETRANSACTION(CreateInternetGateway,"internetGateway")
+ec2ValueTransaction ''CreateInternetGateway "internetGateway"

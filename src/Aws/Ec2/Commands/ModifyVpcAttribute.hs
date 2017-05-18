@@ -28,4 +28,4 @@ instance SignQuery ModifyVpcAttribute where
                                                    EnableDnsSupport es -> [("EnableDnsSupport.Value", qShow es)]
                                                    EnableDnsHostnames eh -> [("EnableDnsHostnames.Value", qShow eh)]
 
-EC2VALUETRANSACTION(ModifyVpcAttribute,"return")
+ec2ValueTransaction ''ModifyVpcAttribute "return"

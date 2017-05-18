@@ -2,9 +2,13 @@
            , MultiParamTypeClasses
            , TypeFamilies
            , RecordWildCards
+           , OverloadedStrings
            #-}
 
 module Aws.Ec2.Commands.DescribeSecurityGroups where
+
+import Data.Aeson (Value (..), FromJSON, (.:), parseJSON)
+import Data.Aeson.Types (typeMismatch)
 
 import Aws.Ec2.TH
 
@@ -27,4 +31,11 @@ instance SignQuery DescribeSecurityGroups where
                                                         [] -> []
                                                         _ -> ("Filter.1.Name", qArg "group-name"):(enumerate "Filter.1.Value" sg_names qArg)
 
-EC2VALUETRANSACTION(DescribeSecurityGroups,"securityGroupInfo")
+ec2ValueTransaction ''DescribeSecurityGroups "securityGroupInfo"
+
+newtype DescribeSecurityGroupsResponse =
+  DescribeSecurityGroupsResponse {dsgrGroups :: [Group]} deriving (Show)
+
+instance FromJSON DescribeSecurityGroupsResponse where
+  parseJSON v = DescribeSecurityGroupsResponse <$>
+    (maybeToList <$> parseJSON v)
