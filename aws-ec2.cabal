@@ -1,5 +1,5 @@
 name: aws-ec2
-version: 0.3.6
+version: 0.3.7
 cabal-version: >=1.10
 build-type: Simple
 license: BSD3
@@ -16,7 +16,7 @@ author: Vladimir Kirillov; MemCachier, Inc
 source-repository this
     type: git
     location: https://github.com/memcachier/aws-ec2.git
-    tag: 0.3.6
+    tag: 0.3.7
 
 source-repository head
     type: git
